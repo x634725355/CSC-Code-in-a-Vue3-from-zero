@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter, useRoute } from "vue-router";
 
 defineProps<{ msg: string }>()
 
 const count = ref(0)
+const router = useRouter()
+const route = useRoute()
+
+function goLink() {
+  router.push({
+    path: '/home'
+  })
+}
+
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
+  <button v-on:click="goLink" >点我</button>
+  <router-link to="/home">Go to Home</router-link>
 
   <p>
     Recommended IDE setup:
