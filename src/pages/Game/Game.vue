@@ -8,6 +8,7 @@ import { routes } from "@/router/routes";
 <template>
     <div class="Game">
         <!-- <template v-for="item in props.routes" ></template> -->
+        
     </div>
 </template>
 

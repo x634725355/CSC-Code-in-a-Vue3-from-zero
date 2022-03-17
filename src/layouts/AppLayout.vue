@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import Sidebar from "@/components/Sidebar.vue";
+// import Sidebar from "@/components/Sidebar.vue";
 import { routes } from "@/router/routes";
 
 const drawerLeft = ref(true)
@@ -61,7 +61,7 @@ onMounted(() => {
             >
                 <q-scroll-area class="fit">
                     <div class="q-pa-sm">
-                        <Sidebar></Sidebar>
+                        <!-- <Sidebar :routes="routes" ></Sidebar> -->
                     </div>
                 </q-scroll-area>
             </q-drawer>
