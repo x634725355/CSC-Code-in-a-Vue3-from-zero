@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
+import Sidebar from "@/components/Sidebar.vue";
+import { routes } from "@/router/routes";
 
 const drawerLeft = ref(true)
 
@@ -26,7 +28,7 @@ onMounted(() => {
 <template>
     <div class="layout">
         <q-layout
-            view="lhh LpR lff"
+            view="hhh LpR lff"
             container
             style="height: 100vh"
             class="shadow-2 rounded-borders"
@@ -44,11 +46,11 @@ onMounted(() => {
                 </q-toolbar>
             </q-header>
 
-            <q-footer>
+            <!-- <q-footer>
                 <q-toolbar>
                     <q-toolbar-title>Footer</q-toolbar-title>
                 </q-toolbar>
-            </q-footer>
+            </q-footer> -->
 
             <q-drawer
                 v-model="drawerLeft"
@@ -59,7 +61,7 @@ onMounted(() => {
             >
                 <q-scroll-area class="fit">
                     <div class="q-pa-sm">
-                        <div v-for="n in 50" :key="n">Drawer {{ n }} / 50</div>
+                        <Sidebar></Sidebar>
                     </div>
                 </q-scroll-area>
             </q-drawer>
@@ -80,7 +82,7 @@ onMounted(() => {
                     </q-page-sticky>
                 </q-page>
 
-                <q-page-scroller position="bottom">
+                <q-page-scroller position="bottom-right">
                     <q-btn fab icon="keyboard_arrow_up" color="red" />
                 </q-page-scroller>
             </q-page-container>

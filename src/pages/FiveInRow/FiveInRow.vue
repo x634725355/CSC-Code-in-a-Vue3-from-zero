@@ -333,6 +333,7 @@ onMounted(() => {
     max-width: 80vw;
     padding: 5px;
     border: 1px solid #42b983;
+    background-color: pink;
     display: flex;
 }
 
