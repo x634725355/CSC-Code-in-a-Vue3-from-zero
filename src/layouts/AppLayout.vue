@@ -1,28 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-// import Sidebar from "@/components/Sidebar.vue";
+import { ref, onMounted } from "vue";
+import Menu from "@/components/Menu.vue";
 import { routes } from "@/router/routes";
 
-const drawerLeft = ref(true)
+const drawerLeft = ref(true);
 
-function touchmoveHandle(event: TouchEvent) {
-    console.log('move', event)
-}
-
-function touchstartHandle(event: TouchEvent) {
-    console.log('start', event);
-}
-
-function touchendHandle(event: TouchEvent) {
-    console.log('end', event);
-}
-
-onMounted(() => {
-    // document.body.addEventListener('touchstart', touchstartHandle)
-    // document.body.addEventListener('touchend', touchendHandle)
-    // document.body.addEventListener('touchmove', touchmoveHandle)
-});
-
+onMounted(() => {});
 </script>
 
 <template>
@@ -33,7 +16,7 @@ onMounted(() => {
             style="height: 100vh"
             class="shadow-2 rounded-borders"
         >
-            <q-header reveal class="bg-black">
+            <q-header reveal class="header">
                 <q-toolbar>
                     <q-btn
                         flat
@@ -42,15 +25,9 @@ onMounted(() => {
                         dense
                         icon="menu"
                     />
-                    <q-toolbar-title>Header</q-toolbar-title>
+                    <q-toolbar-title>澄三彩的米奇妙妙屋</q-toolbar-title>
                 </q-toolbar>
             </q-header>
-
-            <!-- <q-footer>
-                <q-toolbar>
-                    <q-toolbar-title>Footer</q-toolbar-title>
-                </q-toolbar>
-            </q-footer> -->
 
             <q-drawer
                 v-model="drawerLeft"
@@ -61,7 +38,7 @@ onMounted(() => {
             >
                 <q-scroll-area class="fit">
                     <div class="q-pa-sm">
-                        <!-- <Sidebar :routes="routes" ></Sidebar> -->
+                        <Menu :routes="routes" :deep-index="0"></Menu>
                     </div>
                 </q-scroll-area>
             </q-drawer>
@@ -69,17 +46,6 @@ onMounted(() => {
             <q-page-container>
                 <q-page style="padding-top: 60px" class="q-pa-md">
                     <router-view></router-view>
-
-                    <q-page-sticky
-                        position="top"
-                        expand
-                        class="bg-accent text-white"
-                    >
-                        <q-toolbar>
-                            <q-btn flat round dense icon="map" />
-                            <q-toolbar-title>Title</q-toolbar-title>
-                        </q-toolbar>
-                    </q-page-sticky>
                 </q-page>
 
                 <q-page-scroller position="bottom-right">
@@ -90,4 +56,9 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="less"></style>
+<style lang="less" scoped>
+.header {
+    background-color: var(--goldenColor);
+    color: black;
+}
+</style>

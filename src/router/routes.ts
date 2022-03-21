@@ -6,13 +6,14 @@ import PhoneUpglide from "@/pages/PhoneUpglide/PhoneUpglide.vue";
 import FiveInRow from "@/pages/FiveInRow/FiveInRow.vue";
 
 export const routes: RouteRecordRaw[] = [
-    { path: "/", component: Home, name: "Home" },
+    { path: '/', redirect: '/Home' },
+    { path: "/home", component: Home, name: "Home" },
     {
-        path: "/Game",
+        path: "/Game/",
         name: 'Game',
         component: Game,
         children: [
-            { path: "/FiveInRow", component: FiveInRow, name: "FiveInRow" },
+            { path: "FiveInRow", component: FiveInRow, name: "FiveInRow" },
         ],
     },
     { path: "/PhoneUpglide", component: PhoneUpglide, name: "PhoneUpglide" },

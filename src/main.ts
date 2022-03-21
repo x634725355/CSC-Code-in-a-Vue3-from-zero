@@ -6,6 +6,8 @@ import { router } from "@/router/routes"
 
 import App from './App.vue'
 
+import './main.less'
+
 const app = createApp(App)
 
 app.use(router)
