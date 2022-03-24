@@ -1,4 +1,4 @@
-import { createRouter, RouteRecordRaw, createWebHistory } from "vue-router";
+import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 import Home from "@/pages/Home/Home.vue";
 import Game from "@/pages/Game/Game.vue";
@@ -22,6 +22,6 @@ export const routes: RouteRecordRaw[] = [
 ];
 
 export const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 });
