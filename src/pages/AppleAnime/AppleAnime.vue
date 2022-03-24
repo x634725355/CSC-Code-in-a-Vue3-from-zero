@@ -9,6 +9,9 @@ const canvasId = ref("scroll-player");
 const imagesLength = 176; // 图片总数量
 let flag = ref(false);
 
+console.log('lili');
+
+
 /**
  * 获取图片路径
  */
