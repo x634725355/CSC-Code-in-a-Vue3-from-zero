@@ -7,7 +7,7 @@ import { routes } from "@/router/routes";
 
 <template>
     <div class="Game">
-        Game
+        Game momo 
         <router-view></router-view>
     </div>
 </template>
