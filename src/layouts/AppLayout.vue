@@ -58,7 +58,7 @@ onMounted(() => {});
 
 <style lang="less" scoped>
 .header {
-    background-color: var(--goldenColor);
+    background-color: aliceblue;
     color: black;
 }
 </style>
