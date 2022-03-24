@@ -7,7 +7,7 @@ const width = ref(1458);
 const height = ref(820);
 const canvasId = ref("scroll-player");
 const imagesLength = 176; // 图片总数量
-let flag = false;
+let flag = ref(false);
 
 /**
  * 获取图片路径
@@ -41,7 +41,7 @@ async function loadImages() {
             imagesManager[oldIndex] = imgDom.cloneNode() as HTMLImageElement;
             index++;
             if (imagesManager.length === imagesLength) {
-                flag = true;
+                flag.value = true;
                 imagesLoadComplete();
                 return;
             }
@@ -68,7 +68,7 @@ async function loadHalfImages() {
             imagesManager[oldIndex] = imgDom.cloneNode() as HTMLImageElement;
             index++;
             if (index >= 88) {
-                flag = true;
+                flag.value = true;
                 imagesLoadComplete();
                 return;
             }
@@ -176,7 +176,7 @@ window.onload = () => {
 
 <template>
     <div class="AppleAnime">
-        <div v-show="!flag" class="canvas-container">
+        <div v-show="flag" class="canvas-container">
             <canvas
                 :id="canvasId"
                 :width="width"
@@ -185,7 +185,7 @@ window.onload = () => {
             />
         </div>
 
-        <h1 class="loading" v-show="flag">加载中</h1>
+        <h1 class="loading" v-show="!flag">加载中</h1>
 
         <img src="" id="imgLoading" alt="" style="display: none" />
         <img src="" id="imgHalfLoading" alt="" style="display: none" />
