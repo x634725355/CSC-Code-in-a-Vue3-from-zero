@@ -16,8 +16,8 @@ watch(route, (newValue, oldValue) => {
 </script>
 
 <template>
-    <router-view v-show="isHome" ></router-view>
-    <AppLayout v-show="!isHome" />
+    <router-view v-if="isHome" ></router-view>
+    <AppLayout v-if="!isHome" />
 </template>
 
 <style>

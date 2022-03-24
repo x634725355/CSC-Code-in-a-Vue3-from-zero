@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 
 interface calculateType {
     offsetX: number;
@@ -260,6 +260,9 @@ function start() {
     const { chessmanLength, origin, destination, horizontalX, verticalY } =
         checkerboardParameter;
 
+    canvas.removeEventListener("click", chessboardClick);
+    canvas.removeEventListener("mousemove", chessboardMove);
+
     canvas.addEventListener("click", chessboardClick);
     canvas.addEventListener("mousemove", chessboardMove);
 
@@ -283,6 +286,11 @@ function start() {
 
 onMounted(() => {
     start();
+});
+
+onBeforeUnmount(() => {
+    canvas.removeEventListener("click", chessboardClick);
+    canvas.removeEventListener("mousemove", chessboardMove);
 });
 </script>
 
