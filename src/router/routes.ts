@@ -5,6 +5,7 @@ import Game from "@/pages/Game/Game.vue";
 import PhoneUpglide from "@/pages/PhoneUpglide/PhoneUpglide.vue";
 import FiveInRow from "@/pages/FiveInRow/FiveInRow.vue";
 import AppleAnime from "@/pages/AppleAnime/AppleAnime.vue";
+import Demo from "@/pages/Demo/Demo.vue";
 
 export const routes: RouteRecordRaw[] = [
     { path: '/', redirect: '/Home' },
@@ -19,6 +20,7 @@ export const routes: RouteRecordRaw[] = [
     },
     { path: "/AppleAnime", component: AppleAnime, name: "AppleAnime" },
     { path: "/PhoneUpglide", component: PhoneUpglide, name: "PhoneUpglide" },
+    { path: "/Demo", component: Demo, name: "Demo" },
 ];
 
 export const router = createRouter({
