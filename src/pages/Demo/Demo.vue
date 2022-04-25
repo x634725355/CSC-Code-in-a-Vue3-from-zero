@@ -11,7 +11,9 @@ async function start() {
 
     const ctx = canvas.getContext("2d");
 
-    console.log("big", ctx?.getImageData(0, 0, 85, 90));
+    let temp = ctx?.getImageData(0, 0, 85, 90).data;
+
+    console.log("big", temp?.buffer);
 
     copyImg.value = canvas;
 
