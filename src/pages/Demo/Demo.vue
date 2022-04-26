@@ -12,7 +12,7 @@ async function start() {
 
     const ctx = canvas.getContext("2d");
 
-    let temp = ctx?.getImageData(0, 0, 170, 80);
+    let temp = ctx?.getImageData(0, 0, 170, 180);
 
     cutOut.appendChild(copyImg.value);
 
@@ -20,9 +20,9 @@ async function start() {
 
     const copyCtx = copy.getContext("2d");
 
-    const changeData = new ImageData(temp!.data, 170, 80);
+    const changeData = new ImageData(temp!.data, 170, 180);
 
-    changeData.data.set(temp!.data.slice(0, 40000), 2.11)
+    changeData.data.set(temp!.data.slice(0, 122388), 3)
 
     copyCtx?.putImageData(changeData, 0, 0);
     console.log("changeData", temp);
