@@ -44,7 +44,7 @@ onMounted(() => {});
             </q-drawer>
 
             <q-page-container>
-                <q-page style="padding-top: 60px" class="q-pa-md">
+                <q-page class="q-pa-md">
                     <router-view></router-view>
                 </q-page>
 

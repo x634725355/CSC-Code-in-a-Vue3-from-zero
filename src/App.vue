@@ -10,15 +10,13 @@ const route = useRoute();
 const isHome = ref(false);
 
 watch(route, (newValue, oldValue) => {
-    isHome.value = newValue.name === 'Home';
+    isHome.value = newValue.name === "首页";
 });
-
 </script>
 
 <template>
-    <router-view v-if="isHome" ></router-view>
+    <router-view v-if="isHome"></router-view>
     <AppLayout v-if="!isHome" />
 </template>
 
-<style>
-</style>
+<style></style>

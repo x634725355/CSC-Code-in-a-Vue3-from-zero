@@ -7,12 +7,17 @@ const copyImg = ref<HTMLCanvasElement>();
 async function start() {
     const cutOut = document.querySelector(".cutOut")! as HTMLElement;
 
-    const canvas = await html2canvas(cutOut, {});
+    const canvas = await html2canvas(cutOut, {
+        height: 180,
+        width: 170,
+        scale: 1
+    });
     copyImg.value = canvas;
 
     const ctx = canvas.getContext("2d");
 
-    let temp = ctx?.getImageData(0, 0, 170, 180);
+    let temp = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+    console.log("changeData", temp);
 
     cutOut.appendChild(copyImg.value);
 
@@ -20,12 +25,11 @@ async function start() {
 
     const copyCtx = copy.getContext("2d");
 
-    const changeData = new ImageData(temp!.data, 170, 180);
+    const changeData = new ImageData(temp!.data, canvas.width, canvas.height);
 
-    changeData.data.set(temp!.data.slice(0, 122388), 3)
+    changeData.data.set(temp!.data.slice(0, 122388), 3);
 
     copyCtx?.putImageData(changeData, 0, 0);
-    console.log("changeData", temp);
 }
 
 onMounted(() => {
@@ -39,7 +43,7 @@ onMounted(() => {
             <img src="@/assets/Luxanna.jpg" alt="" />
         </div>
 
-        <canvas id="copy"></canvas>
+        <canvas width="170" height="180" id="copy"></canvas>
     </div>
 </template>
 
