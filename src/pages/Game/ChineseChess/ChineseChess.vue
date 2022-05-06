@@ -71,6 +71,13 @@ const redChess = chessType.map<ChessPieces>((value, index) => {
     };
 });
 
+darkChess.push({
+    camp: 'dark',
+    name: 'cannon',
+    top: size.value * 2 - radius.value,
+    left: size.value - radius.value
+})
+
 const chessPieces = reactive<ChessPieces[]>([]);
 </script>
 
