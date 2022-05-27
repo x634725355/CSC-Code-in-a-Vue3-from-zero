@@ -1,89 +1,63 @@
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from "vue";
+import { ChessPieces, configuration, chessText } from "./data";
 
-export interface ChessPieces {
-    name: string;
+interface Dataset {
     top: number;
     left: number;
-    camp: "red" | "dark";
 }
 
 const globalParameter = reactive({
-    horizontal: 11,
-    vertical: 11,
+    horizontal: 10,
+    vertical: 9,
 });
 
 const size = ref(30);
 
 const radius = ref((size.value - 4) / 2);
 
-const width = ref((globalParameter.horizontal - 1) * size.value);
-const height = ref((globalParameter.vertical - 1) * size.value);
+const width = ref((globalParameter.horizontal - 2) * size.value);
+const height = ref(globalParameter.vertical * size.value);
 
-const chessType = [
-    "car",
-    "horse",
-    "elephant",
-    "bodyguard",
-    "general",
-    "bodyguard",
-    "elephant",
-    "horse",
-    "car",
-];
+const biasValue = ref(
+    Math.sqrt(size.value * 4 * size.value + size.value * 4 * size.value)
+);
 
-const chessText = {
-    dark: {
-        car: "车",
-        horse: "马",
-        elephant: "象",
-        bodyguard: "士",
-        general: "将",
-        arms: "卒",
-        cannon: "炮",
-    },
-    red: {
-        car: "车",
-        horse: "马",
-        elephant: "象",
-        bodyguard: "仕",
-        general: "帅",
-        arms: "兵",
-        cannon: "炮",
-    },
-};
+const chessPieces = ref<ChessPieces[]>([]);
 
-const darkChess = chessType.map<ChessPieces>((value, index) => {
-    return {
-        camp: "dark",
-        name: value,
-        top: -radius.value,
-        left: size.value * index - radius.value,
-    };
+function start() {
+    const { darkChess, redChess } = configuration({ size, radius, height });
+
+    chessPieces.value = [...darkChess, ...redChess];
+}
+
+onMounted(() => {
+    start();
 });
 
-const redChess = chessType.map<ChessPieces>((value, index) => {
-    return {
-        camp: "red",
-        name: value,
-        top: height.value - radius.value,
-        left: size.value * index - radius.value,
-    };
-});
+function clickHandle(event: any) {
+    const { offsetX, offsetY, target } = event;
 
-darkChess.push({
-    camp: 'dark',
-    name: 'cannon',
-    top: size.value * 2 - radius.value,
-    left: size.value - radius.value
-})
+    const chessDataset: Dataset = target?.dataset;
 
-const chessPieces = reactive<ChessPieces[]>([]);
+    const chessData = chessPieces.value.find(
+        (p) =>
+            `${p.top}-${p.left}` === `${chessDataset.top}-${chessDataset.left}`
+    );
+
+    console.log(`x: ${offsetX}, y: ${offsetY}`, chessData, event);
+}
+
+function mousemoveHandle(event: MouseEvent) {
+    // console.log("event", event);
+}
 </script>
 
 <template>
     <div class="ChineseChess">
         <div
+            @click="clickHandle"
+            @mousemove="mousemoveHandle"
             class="checkerboard"
             :style="{ width: width + 40 + 'px', height: height + 40 + 'px' }"
         >
@@ -92,14 +66,49 @@ const chessPieces = reactive<ChessPieces[]>([]);
                     :style="{
                         top: `${(item - 1) * size}px`,
                     }"
-                    v-if="item !== 6"
                     class="horizontal"
                 ></div>
             </template>
-            <div class="chess">车</div>
-            <div class="chess2"></div>
 
-            <div class="blank"></div>
+            <div
+                v-for="chess in chessPieces"
+                :style="{ top: `${chess.top}px`, left: `${chess.left}px` }"
+                class="chess"
+                :data-top="chess.top"
+                :data-left="chess.left"
+                :class="chess.camp"
+            >
+                {{ chessText[chess.camp][chess.name] }}
+            </div>
+
+            <div class="blank">
+                <span>楚河</span>
+                <span>汉界</span>
+            </div>
+            <div
+                class="bias dark-bias1"
+                :style="{
+                    width: `${biasValue}px`,
+                }"
+            ></div>
+            <div
+                class="bias dark-bias2"
+                :style="{
+                    width: `${biasValue}px`,
+                }"
+            ></div>
+            <div
+                class="bias red-bias1"
+                :style="{
+                    width: `${biasValue}px`,
+                }"
+            ></div>
+            <div
+                class="bias red-bias2"
+                :style="{
+                    width: `${biasValue}px`,
+                }"
+            ></div>
 
             <div
                 :style="{
@@ -118,8 +127,6 @@ const chessPieces = reactive<ChessPieces[]>([]);
         background-color: #ffd36e;
         position: relative;
         border: 20px solid #ffd36e;
-        width: 340px;
-        height: 340px;
 
         // 水平
         .horizontal {
@@ -127,7 +134,7 @@ const chessPieces = reactive<ChessPieces[]>([]);
             z-index: 5;
             background-color: #180a0a;
 
-            width: 300px;
+            width: 240px;
             height: 1px;
 
             left: 0px;
@@ -139,7 +146,7 @@ const chessPieces = reactive<ChessPieces[]>([]);
             z-index: 5;
             background-color: #180a0a;
 
-            height: 300px;
+            height: 270px;
             width: 1px;
 
             top: 0px;
@@ -147,12 +154,15 @@ const chessPieces = reactive<ChessPieces[]>([]);
 
         .blank {
             background-color: #ffd36e;
-            height: 59px;
-            width: 299px;
+            height: 29px;
+            width: 239px;
             position: absolute;
             top: 121px;
             left: 1px;
-            z-index: 6;
+            z-index: 7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .chess {
@@ -169,17 +179,43 @@ const chessPieces = reactive<ChessPieces[]>([]);
             align-items: center;
             border: 1px solid #180a0a;
             color: #251d3a;
+            cursor: pointer;
         }
 
-        .chess2 {
+        .red {
+            color: #f32424;
+        }
+
+        .dark {
+            color: #180a0a;
+        }
+
+        .bias {
+            background-color: #180a0a;
+            height: 1px;
             position: absolute;
-            top: -13px;
-            left: 17px;
-            z-index: 10;
-            width: 26px;
-            height: 26px;
-            background-color: palevioletred;
-            border-radius: 50%;
+            z-index: 6;
+        }
+
+        .dark-bias1 {
+            top: 30px;
+            left: 78px;
+            transform: rotate(45deg);
+        }
+        .dark-bias2 {
+            top: 30px;
+            left: 78px;
+            transform: rotate(-45deg);
+        }
+        .red-bias1 {
+            top: 240px;
+            left: 78px;
+            transform: rotate(45deg);
+        }
+        .red-bias2 {
+            top: 240px;
+            left: 78px;
+            transform: rotate(-45deg);
         }
     }
 }
