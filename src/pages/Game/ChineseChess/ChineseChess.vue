@@ -14,16 +14,21 @@ const globalParameter = reactive({
 
 const size = ref(30);
 
-const radius = ref((size.value - 4) / 2);
+const offset = ref(20);
+
+const radius = ref(size.value / 2);
 
 const width = ref((globalParameter.horizontal - 2) * size.value);
 const height = ref(globalParameter.vertical * size.value);
 
+// 偏斜线的长度
 const biasValue = ref(
     Math.sqrt(size.value * 4 * size.value + size.value * 4 * size.value)
 );
 
+// 棋盘所用数据
 const chessPieces = ref<ChessPieces[]>([]);
+const lastClickData = ref<ChessPieces | null>(null);
 
 function start() {
     const { darkChess, redChess } = configuration({ size, radius, height });
@@ -45,7 +50,22 @@ function clickHandle(event: any) {
             `${p.top}-${p.left}` === `${chessDataset.top}-${chessDataset.left}`
     );
 
-    console.log(`x: ${offsetX}, y: ${offsetY}`, chessData, event);
+    let lastChessData: ChessPieces | null = null;
+
+    if (chessData) {
+        if (lastClickData.value) {
+            
+            return false;
+        }
+
+        chessData.select = true;
+        lastClickData.value = chessData;
+
+
+        return false;
+    }
+
+    console.log(`x: ${offsetX}, y: ${offsetY}`, chessData);
 }
 
 function mousemoveHandle(event: MouseEvent) {
@@ -59,7 +79,11 @@ function mousemoveHandle(event: MouseEvent) {
             @click="clickHandle"
             @mousemove="mousemoveHandle"
             class="checkerboard"
-            :style="{ width: width + 40 + 'px', height: height + 40 + 'px' }"
+            :style="{
+                width: width + 40 + 'px',
+                height: height + 40 + 'px',
+                border: `${offset}px solid #ffd36e`,
+            }"
         >
             <template v-for="item in globalParameter.horizontal">
                 <div
@@ -71,12 +95,20 @@ function mousemoveHandle(event: MouseEvent) {
             </template>
 
             <div
+                class="tall"
+                :style="{
+                    width: width + 40 + 'px',
+                    height: height + 40 + 'px',
+                }"
+            ></div>
+
+            <div
                 v-for="chess in chessPieces"
                 :style="{ top: `${chess.top}px`, left: `${chess.left}px` }"
                 class="chess"
                 :data-top="chess.top"
                 :data-left="chess.left"
-                :class="chess.camp"
+                :class="`${chess.camp} ${chess.select ? 'select' : null}`"
             >
                 {{ chessText[chess.camp][chess.name] }}
             </div>
@@ -126,7 +158,14 @@ function mousemoveHandle(event: MouseEvent) {
     .checkerboard {
         background-color: #ffd36e;
         position: relative;
-        border: 20px solid #ffd36e;
+
+        .tall {
+            position: absolute;
+            z-index: 10;
+            left: -20px;
+            top: -20px;
+            background-color: transparent;
+        }
 
         // 水平
         .horizontal {
@@ -145,10 +184,8 @@ function mousemoveHandle(event: MouseEvent) {
             position: absolute;
             z-index: 5;
             background-color: #180a0a;
-
             height: 270px;
             width: 1px;
-
             top: 0px;
         }
 
@@ -167,11 +204,11 @@ function mousemoveHandle(event: MouseEvent) {
 
         .chess {
             position: absolute;
-            top: -13px;
-            left: -13px;
+            top: -15px;
+            left: -15px;
             z-index: 10;
-            width: 26px;
-            height: 26px;
+            width: 30px;
+            height: 30px;
             background-color: #f5d7a1;
             border-radius: 50%;
             display: flex;
@@ -216,6 +253,10 @@ function mousemoveHandle(event: MouseEvent) {
             top: 240px;
             left: 78px;
             transform: rotate(-45deg);
+        }
+
+        .select {
+            background-color: #f32424;
         }
     }
 }

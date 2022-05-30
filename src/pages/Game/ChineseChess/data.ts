@@ -17,6 +17,7 @@ export interface ChessPieces {
     left: number;
     camp: CampKey;
     select: boolean;
+    life: boolean;
 }
 
 interface Props {
@@ -47,6 +48,7 @@ export function configuration(props: Props) {
             top: -radius.value,
             left: size.value * index - radius.value,
             select: false,
+            life: true,
         };
     });
 
@@ -57,6 +59,7 @@ export function configuration(props: Props) {
             top: height.value - radius.value,
             left: size.value * index - radius.value,
             select: false,
+            life: true,
         };
     });
 
@@ -67,6 +70,7 @@ export function configuration(props: Props) {
             top: size.value * 7 - radius.value,
             left: size.value - radius.value,
             select: false,
+            life: true,
         },
         {
             camp: "red",
@@ -74,6 +78,7 @@ export function configuration(props: Props) {
             top: size.value * 7 - radius.value,
             left: size.value * 7 - radius.value,
             select: false,
+            life: true,
         }
     );
 
@@ -84,6 +89,7 @@ export function configuration(props: Props) {
             top: size.value * 2 - radius.value,
             left: size.value - radius.value,
             select: false,
+            life: true,
         },
         {
             camp: "dark",
@@ -91,6 +97,7 @@ export function configuration(props: Props) {
             top: size.value * 2 - radius.value,
             left: size.value * 7 - radius.value,
             select: false,
+            life: true,
         }
     );
 
@@ -101,6 +108,7 @@ export function configuration(props: Props) {
             top: size.value * 3 - radius.value,
             left: size.value * value - radius.value,
             select: false,
+            life: true,
         });
 
         redChess.push({
@@ -109,6 +117,7 @@ export function configuration(props: Props) {
             top: size.value * 6 - radius.value,
             left: size.value * value - radius.value,
             select: false,
+            life: true,
         });
     });
 
