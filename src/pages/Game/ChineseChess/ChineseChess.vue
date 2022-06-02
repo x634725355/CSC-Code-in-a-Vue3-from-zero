@@ -7,6 +7,11 @@ interface Dataset {
     left: number;
 }
 
+interface calculateType {
+    offsetX: number;
+    offsetY: number;
+}
+
 const globalParameter = reactive({
     horizontal: 10,
     vertical: 9,
@@ -20,6 +25,9 @@ const radius = ref(size.value / 2);
 
 const width = ref((globalParameter.horizontal - 2) * size.value);
 const height = ref(globalParameter.vertical * size.value);
+
+const redLine = ref(150);
+const darkLine = ref(120);
 
 // 偏斜线的长度
 const biasValue = ref(
@@ -40,32 +48,85 @@ onMounted(() => {
     start();
 });
 
+// 计算落点坐标
+function calculateChessman({ offsetX, offsetY }: calculateType) {
+    const chessmanLength = size.value;
+    const offsetValue = offset.value;
+
+    const hanldeX =
+        Math.round(
+            (Math.round((offsetX - offsetValue) / 10) * 10) / chessmanLength
+        ) * chessmanLength;
+    const hanldeY =
+        Math.round(
+            (Math.round((offsetY - offsetValue) / 10) * 10) / chessmanLength
+        ) * chessmanLength;
+
+    return { hanldeX, hanldeY };
+}
+
+// 计算棋子真实坐标
+function convertChess(chessData: ChessPieces) {
+
+    const chessX = chessData.left + radius.value;
+    const chessY = chessData.top
+
+    return { chessX, chessY };
+}
+
+function chessRule(chessData: ChessPieces) {
+    const lastData = lastClickData.value!;
+
+    switch (lastData.name) {
+        case "soldier":
+            
+            chessData.top > lastData.top
+
+            if (chessData.camp === 'red') {
+                
+            }
+            chessData.top
+            break;
+        default:
+            break;
+    }
+}
+
 function clickHandle(event: any) {
     const { offsetX, offsetY, target } = event;
+
+    const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
 
     const chessDataset: Dataset = target?.dataset;
 
     const chessData = chessPieces.value.find(
-        (p) =>
-            `${p.top}-${p.left}` === `${chessDataset.top}-${chessDataset.left}`
+        (p) => p.top == chessDataset.top && p.left == chessDataset.left
     );
 
-    let lastChessData: ChessPieces | null = null;
+    console.log(`x: ${hanldeX}, y: ${hanldeY}`, chessData);
 
     if (chessData) {
         if (lastClickData.value) {
-            
-            return false;
+            if (
+                lastClickData.value.top == chessData.top &&
+                lastClickData.value.left == chessData.left
+            ) {
+                chessData.select = !chessData.select;
+                return;
+            }
+
+            chessPieces.value.find(
+                (p) =>
+                    `${p.top}-${p.left}` ===
+                    `${lastClickData.value!.top}-${lastClickData.value!.left}`
+            )!.select = false;
         }
 
         chessData.select = true;
-        lastClickData.value = chessData;
-
+        lastClickData.value = { ...chessData };
 
         return false;
     }
-
-    console.log(`x: ${offsetX}, y: ${offsetY}`, chessData);
 }
 
 function mousemoveHandle(event: MouseEvent) {
@@ -256,7 +317,9 @@ function mousemoveHandle(event: MouseEvent) {
         }
 
         .select {
-            background-color: #f32424;
+            border: 2px solid #f24a72;
+            box-shadow: 0 0 5px #f24a72, 0 0 25px #f24a72, 0 0 50px #f24a72,
+                0 0 100px #f56d91;
         }
     }
 }
