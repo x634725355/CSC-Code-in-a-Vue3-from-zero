@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, handleError } from "vue";
 import { ChessPieces, configuration, chessText } from "./data";
 
 interface Dataset {
@@ -7,9 +7,20 @@ interface Dataset {
     left: number;
 }
 
-interface calculateType {
+interface CalculateType {
     offsetX: number;
     offsetY: number;
+}
+
+interface ChessRule {
+    hanldeX: number;
+    hanldeY: number;
+    chessData: ChessPieces | undefined
+}
+
+interface RuleData {
+    lastData: ChessPieces;
+    handleCoordinates: ChessRule;
 }
 
 const globalParameter = reactive({
@@ -26,9 +37,6 @@ const radius = ref(size.value / 2);
 const width = ref((globalParameter.horizontal - 2) * size.value);
 const height = ref(globalParameter.vertical * size.value);
 
-const redLine = ref(150);
-const darkLine = ref(120);
-
 // 偏斜线的长度
 const biasValue = ref(
     Math.sqrt(size.value * 4 * size.value + size.value * 4 * size.value)
@@ -36,7 +44,9 @@ const biasValue = ref(
 
 // 棋盘所用数据
 const chessPieces = ref<ChessPieces[]>([]);
-const lastClickData = ref<ChessPieces | null>(null);
+const lastChessData = ref<ChessPieces | null>(null);
+const redLine = ref(150);
+const darkLine = ref(120);
 
 function start() {
     const { darkChess, redChess } = configuration({ size, radius, height });
@@ -49,7 +59,7 @@ onMounted(() => {
 });
 
 // 计算落点坐标
-function calculateChessman({ offsetX, offsetY }: calculateType) {
+function calculateChessman({ offsetX, offsetY }: CalculateType) {
     const chessmanLength = size.value;
     const offsetValue = offset.value;
 
@@ -66,36 +76,108 @@ function calculateChessman({ offsetX, offsetY }: calculateType) {
 }
 
 // 计算棋子真实坐标
-function convertChess(chessData: ChessPieces) {
+function convertChess(chessData: ChessPieces | undefined) {
+    if (!chessData) {
+        return { chessX: 0, chessY: 0 };
+    }
 
     const chessX = chessData.left + radius.value;
-    const chessY = chessData.top
+    const chessY = chessData.top + radius.value;
 
     return { chessX, chessY };
 }
 
-function chessRule(chessData: ChessPieces) {
-    const lastData = lastClickData.value!;
+function soldierRule({
+    handleCoordinates,
+    lastData,
+}: RuleData): Dataset | false {
+    const { hanldeX, hanldeY, chessData } = handleCoordinates;
+    const { chessX, chessY } = convertChess(lastData);
+
+    const judgments = {
+        red: [
+            chessY - 30 === hanldeY && chessX === hanldeX,
+            chessX - 30 === hanldeX &&
+                chessY === hanldeY &&
+                darkLine.value >= chessY,
+            chessX + 30 === hanldeX &&
+                chessY === hanldeY &&
+                darkLine.value >= chessY,
+        ],
+        dark: [
+            chessY + 30 === hanldeY && chessX === hanldeX,
+            chessX - 30 === hanldeX &&
+                chessY === hanldeY &&
+                redLine.value <= chessY,
+            chessX + 30 === hanldeX &&
+                chessY === hanldeY &&
+                redLine.value <= chessY,
+        ],
+    };
+
+    switch (lastData.camp) {
+        case "red":
+            if (judgments.red.some((p) => p)) {
+                return {
+                    top: hanldeY - radius.value,
+                    left: hanldeX - radius.value,
+                };
+            }
+
+            break;
+        case "dark":
+            if (judgments.dark.some((p) => p)) {
+                return {
+                    top: hanldeY - radius.value,
+                    left: hanldeX - radius.value,
+                };
+            }
+            break;
+        default:
+            return false;
+            break;
+    }
+
+    return false;
+}
+
+function chessRule({ hanldeX, hanldeY, chessData }: ChessRule) {
+    if (!lastChessData.value) {
+        return false;
+    }
+
+    const lastData = lastChessData.value;
+    const lastChess = chessPieces.value.find(
+        (p) => p.top == lastData.top && p.left == lastData.left
+    )!;
+    let result: Dataset | false = false;
 
     switch (lastData.name) {
         case "soldier":
-            
-            chessData.top > lastData.top
-
-            if (chessData.camp === 'red') {
-                
+            result = soldierRule({
+                handleCoordinates: { hanldeX, hanldeY, chessData },
+                lastData,
+            });
+            if (!result) {
+                return false;
             }
-            chessData.top
+
+            lastChess.top = result.top;
+            lastChess.left = result.left;
+
             break;
         default:
             break;
     }
+
+    lastChess.select = false;
+    lastChessData.value = null;
+
+    return result;
 }
 
 function clickHandle(event: any) {
     const { offsetX, offsetY, target } = event;
-
-    const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
 
     const chessDataset: Dataset = target?.dataset;
 
@@ -103,27 +185,45 @@ function clickHandle(event: any) {
         (p) => p.top == chessDataset.top && p.left == chessDataset.left
     );
 
-    console.log(`x: ${hanldeX}, y: ${hanldeY}`, chessData);
+    const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
+    const { chessX, chessY } = convertChess(chessData);
+
+    console.log(
+        `x: ${hanldeX}, y: ${hanldeY} ---- chessX: ${chessX}, chessY: ${chessY}`
+    );
+
+    const result = chessRule({ hanldeX, hanldeY, chessData });
+
+    console.log("???", result, chessData);
+
+    if (result && chessData) {
+        chessData.life = false;
+        chessData.select = false;
+
+        return false;
+    }
 
     if (chessData) {
-        if (lastClickData.value) {
+        if (lastChessData.value) {
+            // 上次点击棋子与当前点击位置相同
             if (
-                lastClickData.value.top == chessData.top &&
-                lastClickData.value.left == chessData.left
+                lastChessData.value.top == chessData.top &&
+                lastChessData.value.left == chessData.left
             ) {
                 chessData.select = !chessData.select;
+                lastChessData.value = null;
                 return;
             }
 
             chessPieces.value.find(
                 (p) =>
                     `${p.top}-${p.left}` ===
-                    `${lastClickData.value!.top}-${lastClickData.value!.left}`
+                    `${lastChessData.value!.top}-${lastChessData.value!.left}`
             )!.select = false;
         }
 
         chessData.select = true;
-        lastClickData.value = { ...chessData };
+        lastChessData.value = { ...chessData };
 
         return false;
     }
