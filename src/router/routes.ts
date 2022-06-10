@@ -20,19 +20,21 @@ export const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: "FiveInRow",
-                component: import("@/pages/Game/FiveInRow/FiveInRow.vue"),
+                // component: import("@/pages/Game/FiveInRow/FiveInRow.vue"),
+                component: FiveInRow,
                 name: "污渍棋",
             },
             {
                 path: "ChineseChess",
-                component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
+                // component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
+                component: ChineseChess,
                 name: "象棋",
             },
         ],
     },
     {
         path: "/AppleAnime",
-        component: import("@/pages/AppleAnime/AppleAnime.vue"),
+        component: AppleAnime,
         name: "🍎 动画",
     },
     { path: "/PhoneUpglide", component: PhoneUpglide, name: "PhoneUpglide" },

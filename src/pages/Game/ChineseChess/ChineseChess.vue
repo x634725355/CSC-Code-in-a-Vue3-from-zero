@@ -15,7 +15,8 @@ interface CalculateType {
 interface ChessRule {
     hanldeX: number;
     hanldeY: number;
-    chessData: ChessPieces | undefined
+    chessData: ChessPieces | undefined;
+    lastChessData: ChessPieces | undefined;
 }
 
 interface RuleData {
@@ -44,7 +45,8 @@ const biasValue = ref(
 
 // 棋盘所用数据
 const chessPieces = ref<ChessPieces[]>([]);
-const lastChessData = ref<ChessPieces | null>(null);
+const removingChessPieces = ref<ChessPieces[]>([]);
+const lastClickChess = ref<ChessPieces | null>(null);
 const redLine = ref(150);
 const darkLine = ref(120);
 
@@ -76,7 +78,7 @@ function calculateChessman({ offsetX, offsetY }: CalculateType) {
 }
 
 // 计算棋子真实坐标
-function convertChess(chessData: ChessPieces | undefined) {
+function convertChess(chessData: ChessPieces | undefined | null) {
     if (!chessData) {
         return { chessX: 0, chessY: 0 };
     }
@@ -88,11 +90,18 @@ function convertChess(chessData: ChessPieces | undefined) {
 }
 
 function soldierRule({
-    handleCoordinates,
-    lastData,
-}: RuleData): Dataset | false {
-    const { hanldeX, hanldeY, chessData } = handleCoordinates;
-    const { chessX, chessY } = convertChess(lastData);
+    chessData,
+    lastChessData,
+    hanldeX,
+    hanldeY,
+}: ChessRule): Dataset | false {
+    const { chessX, chessY } = convertChess(lastChessData);
+
+    if (chessData) {
+        const converData = convertChess(chessData);
+        hanldeX = converData.chessX;
+        hanldeY = converData.chessY;
+    }
 
     const judgments = {
         red: [
@@ -115,7 +124,7 @@ function soldierRule({
         ],
     };
 
-    switch (lastData.camp) {
+    switch (lastChessData!.camp) {
         case "red":
             if (judgments.red.some((p) => p)) {
                 return {
@@ -141,37 +150,57 @@ function soldierRule({
     return false;
 }
 
-function chessRule({ hanldeX, hanldeY, chessData }: ChessRule) {
-    if (!lastChessData.value) {
+function carRule({
+    chessData,
+    lastChessData,
+    hanldeX,
+    hanldeY,
+}: ChessRule): Dataset | false {
+    const { chessX, chessY } = convertChess(lastChessData);
+
+    if (chessData) {
+        const converData = convertChess(chessData);
+        hanldeX = converData.chessX;
+        hanldeY = converData.chessY;
+    }
+
+    const judgments = [
+        chessX !== hanldeX && chessY === hanldeY,
+        chessX !== hanldeX && chessY === hanldeY,
+    ];
+
+    return false;
+}
+
+function chessRule({ hanldeX, hanldeY, chessData, lastChessData }: ChessRule) {
+    if (!lastChessData) {
         return false;
     }
 
-    const lastData = lastChessData.value;
-    const lastChess = chessPieces.value.find(
-        (p) => p.top == lastData.top && p.left == lastData.left
-    )!;
     let result: Dataset | false = false;
 
-    switch (lastData.name) {
+    switch (lastChessData.name) {
         case "soldier":
             result = soldierRule({
-                handleCoordinates: { hanldeX, hanldeY, chessData },
-                lastData,
+                hanldeX,
+                hanldeY,
+                chessData,
+                lastChessData,
             });
             if (!result) {
                 return false;
             }
 
-            lastChess.top = result.top;
-            lastChess.left = result.left;
+            lastChessData.top = result.top;
+            lastChessData.left = result.left;
 
             break;
         default:
             break;
     }
 
-    lastChess.select = false;
-    lastChessData.value = null;
+    lastChessData.select = false;
+    lastClickChess.value = null;
 
     return result;
 }
@@ -181,49 +210,76 @@ function clickHandle(event: any) {
 
     const chessDataset: Dataset = target?.dataset;
 
-    const chessData = chessPieces.value.find(
-        (p) => p.top == chessDataset.top && p.left == chessDataset.left
-    );
+    let chessIndex = 0;
+
+    let lastChessData: ChessPieces;
+
+    let chessData: ChessPieces;
+
+    chessPieces.value.forEach((p, index) => {
+        if (p.top == chessDataset.top && p.left == chessDataset.left) {
+            chessIndex = index;
+            chessData = p;
+        }
+
+        if (lastClickChess.value) {
+            if (
+                p.top == lastClickChess.value.top &&
+                p.left == lastClickChess.value.left
+            ) {
+                lastChessData = p;
+            }
+        }
+    });
 
     const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
-    const { chessX, chessY } = convertChess(chessData);
+    const { chessX, chessY } = convertChess(chessData!);
 
     console.log(
         `x: ${hanldeX}, y: ${hanldeY} ---- chessX: ${chessX}, chessY: ${chessY}`
     );
 
-    const result = chessRule({ hanldeX, hanldeY, chessData });
+    const result = chessRule({
+        hanldeX,
+        hanldeY,
+        chessData: chessData!,
+        lastChessData: lastChessData!,
+    });
 
-    console.log("???", result, chessData);
+    // console.log('clickHandle', result, chessData);
 
-    if (result && chessData) {
+    if (!!result && !!chessData!) {
+        console.log("吃棋", result, chessData);
+        removingChessPieces.value.push(
+            ...chessPieces.value.splice(chessIndex, 1)
+        );
         chessData.life = false;
         chessData.select = false;
 
         return false;
     }
 
-    if (chessData) {
-        if (lastChessData.value) {
+    if (chessData!) {
+        if (lastClickChess.value) {
             // 上次点击棋子与当前点击位置相同
             if (
-                lastChessData.value.top == chessData.top &&
-                lastChessData.value.left == chessData.left
+                lastClickChess.value.top == chessData.top &&
+                lastClickChess.value.left == chessData.left
             ) {
                 chessData.select = !chessData.select;
-                lastChessData.value = null;
+                lastClickChess.value = null;
                 return;
             }
 
             chessPieces.value.find(
                 (p) =>
-                    `${p.top}-${p.left}` ===
-                    `${lastChessData.value!.top}-${lastChessData.value!.left}`
+                    p.top === lastClickChess.value!.top &&
+                    p.left === lastClickChess.value!.left
             )!.select = false;
         }
 
         chessData.select = true;
-        lastChessData.value = { ...chessData };
+        lastClickChess.value = { ...chessData };
 
         return false;
     }
@@ -269,6 +325,7 @@ function mousemoveHandle(event: MouseEvent) {
                 class="chess"
                 :data-top="chess.top"
                 :data-left="chess.left"
+                v-show="chess.life"
                 :class="`${chess.camp} ${chess.select ? 'select' : null}`"
             >
                 {{ chessText[chess.camp][chess.name] }}
