@@ -1,27 +1,38 @@
 <script lang="ts" setup>
+import { removeTypeDuplicates } from "@babel/types";
 import { ref, onMounted, reactive, handleError } from "vue";
 import { ChessPieces, configuration, chessText } from "./data";
-
-interface Dataset {
-    top: number;
-    left: number;
-}
+import {
+    bodyguardRule,
+    cannonRule,
+    carRule,
+    elephantRule,
+    generalRule,
+    horseRule,
+    soldierRule,
+    ChessRule,
+    Dataset,
+    convertChess,
+} from "./chessRule";
 
 interface CalculateType {
     offsetX: number;
     offsetY: number;
 }
 
-interface ChessRule {
-    hanldeX: number;
-    hanldeY: number;
-    chessData: ChessPieces | undefined;
-    lastChessData: ChessPieces | undefined;
-}
-
 interface RuleData {
     lastData: ChessPieces;
     handleCoordinates: ChessRule;
+}
+
+interface FuncMap {
+    car: (chessRule: ChessRule) => Dataset | false;
+    horse: (chessRule: ChessRule) => Dataset | false;
+    elephant: (chessRule: ChessRule) => Dataset | false;
+    bodyguard: (chessRule: ChessRule) => Dataset | false;
+    general: (chessRule: ChessRule) => Dataset | false;
+    soldier: (chessRule: ChessRule) => Dataset | false;
+    cannon: (chessRule: ChessRule) => Dataset | false;
 }
 
 const globalParameter = reactive({
@@ -43,22 +54,27 @@ const biasValue = ref(
     Math.sqrt(size.value * 4 * size.value + size.value * 4 * size.value)
 );
 
+// 用户数据
+const userRed = reactive({
+    fall: false,
+    victory: false,
+});
+
+const userDark = reactive({
+    fall: false,
+    victory: false,
+});
+
 // 棋盘所用数据
 const chessPieces = ref<ChessPieces[]>([]);
 const removingChessPieces = ref<ChessPieces[]>([]);
 const lastClickChess = ref<ChessPieces | null>(null);
-const redLine = ref(150);
-const darkLine = ref(120);
 
 function start() {
     const { darkChess, redChess } = configuration({ size, radius, height });
 
     chessPieces.value = [...darkChess, ...redChess];
 }
-
-onMounted(() => {
-    start();
-});
 
 // 计算落点坐标
 function calculateChessman({ offsetX, offsetY }: CalculateType) {
@@ -77,127 +93,50 @@ function calculateChessman({ offsetX, offsetY }: CalculateType) {
     return { hanldeX, hanldeY };
 }
 
-// 计算棋子真实坐标
-function convertChess(chessData: ChessPieces | undefined | null) {
-    if (!chessData) {
-        return { chessX: 0, chessY: 0 };
-    }
-
-    const chessX = chessData.left + radius.value;
-    const chessY = chessData.top + radius.value;
-
-    return { chessX, chessY };
-}
-
-function soldierRule({
-    chessData,
-    lastChessData,
+function chessRule({
     hanldeX,
     hanldeY,
-}: ChessRule): Dataset | false {
-    const { chessX, chessY } = convertChess(lastChessData);
-
-    if (chessData) {
-        const converData = convertChess(chessData);
-        hanldeX = converData.chessX;
-        hanldeY = converData.chessY;
-    }
-
-    const judgments = {
-        red: [
-            chessY - 30 === hanldeY && chessX === hanldeX,
-            chessX - 30 === hanldeX &&
-                chessY === hanldeY &&
-                darkLine.value >= chessY,
-            chessX + 30 === hanldeX &&
-                chessY === hanldeY &&
-                darkLine.value >= chessY,
-        ],
-        dark: [
-            chessY + 30 === hanldeY && chessX === hanldeX,
-            chessX - 30 === hanldeX &&
-                chessY === hanldeY &&
-                redLine.value <= chessY,
-            chessX + 30 === hanldeX &&
-                chessY === hanldeY &&
-                redLine.value <= chessY,
-        ],
-    };
-
-    switch (lastChessData!.camp) {
-        case "red":
-            if (judgments.red.some((p) => p)) {
-                return {
-                    top: hanldeY - radius.value,
-                    left: hanldeX - radius.value,
-                };
-            }
-
-            break;
-        case "dark":
-            if (judgments.dark.some((p) => p)) {
-                return {
-                    top: hanldeY - radius.value,
-                    left: hanldeX - radius.value,
-                };
-            }
-            break;
-        default:
-            return false;
-            break;
-    }
-
-    return false;
-}
-
-function carRule({
     chessData,
     lastChessData,
-    hanldeX,
-    hanldeY,
-}: ChessRule): Dataset | false {
-    const { chessX, chessY } = convertChess(lastChessData);
-
-    if (chessData) {
-        const converData = convertChess(chessData);
-        hanldeX = converData.chessX;
-        hanldeY = converData.chessY;
-    }
-
-    const judgments = [
-        chessX !== hanldeX && chessY === hanldeY,
-        chessX !== hanldeX && chessY === hanldeY,
-    ];
-
-    return false;
-}
-
-function chessRule({ hanldeX, hanldeY, chessData, lastChessData }: ChessRule) {
+    chessPieces,
+}: ChessRule) {
     if (!lastChessData) {
+        return false;
+    }
+
+    if (lastChessData.camp === chessData?.camp) {
         return false;
     }
 
     let result: Dataset | false = false;
 
-    switch (lastChessData.name) {
-        case "soldier":
-            result = soldierRule({
-                hanldeX,
-                hanldeY,
-                chessData,
-                lastChessData,
-            });
-            if (!result) {
-                return false;
-            }
+    const funcMap: FuncMap = {
+        soldier: soldierRule,
+        car: carRule,
+        bodyguard: bodyguardRule,
+        cannon: cannonRule,
+        elephant: elephantRule,
+        general: generalRule,
+        horse: horseRule,
+    };
 
-            lastChessData.top = result.top;
-            lastChessData.left = result.left;
+    result = funcMap[lastChessData.name]({
+        hanldeX,
+        hanldeY,
+        chessData,
+        lastChessData,
+        radius,
+        chessPieces,
+    });
 
-            break;
-        default:
-            break;
+    if (!result) {
+        return false;
     }
+
+    lastChessData.top = result.top;
+    lastChessData.left = result.left;
+    userRed.fall = !userRed.fall;
+    userDark.fall = !userDark.fall;
 
     lastChessData.select = false;
     lastClickChess.value = null;
@@ -233,7 +172,7 @@ function clickHandle(event: any) {
     });
 
     const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
-    const { chessX, chessY } = convertChess(chessData!);
+    const { chessX, chessY } = convertChess(chessData!, radius);
 
     console.log(
         `x: ${hanldeX}, y: ${hanldeY} ---- chessX: ${chessX}, chessY: ${chessY}`
@@ -244,9 +183,9 @@ function clickHandle(event: any) {
         hanldeY,
         chessData: chessData!,
         lastChessData: lastChessData!,
+        radius,
+        chessPieces: chessPieces.value,
     });
-
-    // console.log('clickHandle', result, chessData);
 
     if (!!result && !!chessData!) {
         console.log("吃棋", result, chessData);
@@ -260,6 +199,14 @@ function clickHandle(event: any) {
     }
 
     if (chessData!) {
+        // if (userRed.fall && chessData.camp === "dark") {
+        //     return false;
+        // }
+
+        // if (userDark.fall && chessData.camp === "red") {
+        //     return false;
+        // }
+
         if (lastClickChess.value) {
             // 上次点击棋子与当前点击位置相同
             if (
@@ -288,6 +235,11 @@ function clickHandle(event: any) {
 function mousemoveHandle(event: MouseEvent) {
     // console.log("event", event);
 }
+
+onMounted(() => {
+    userRed.fall = true;
+    start();
+});
 </script>
 
 <template>
@@ -367,6 +319,9 @@ function mousemoveHandle(event: MouseEvent) {
                 v-for="item in globalParameter.vertical"
                 class="vertical"
             ></div>
+
+            <div v-show="userRed.fall" class="fall fallRed">红</div>
+            <div v-show="userDark.fall" class="fall fallDark">黑</div>
         </div>
     </div>
 </template>
@@ -477,6 +432,25 @@ function mousemoveHandle(event: MouseEvent) {
             border: 2px solid #f24a72;
             box-shadow: 0 0 5px #f24a72, 0 0 25px #f24a72, 0 0 50px #f24a72,
                 0 0 100px #f56d91;
+        }
+
+        .fall {
+            position: absolute;
+            z-index: 4;
+            opacity: 0.4;
+            font-size: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .fallRed {
+            color: #f32424;
+            bottom: -15px;
+        }
+
+        .fallDark {
+            color: #180a0a;
+            top: -15px;
         }
     }
 }
