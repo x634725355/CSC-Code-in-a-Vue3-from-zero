@@ -33,6 +33,7 @@ export interface Dataset {
     left: number;
 }
 
+// 兵
 export function soldierRule({
     chessData,
     lastChessData,
@@ -87,6 +88,7 @@ export function soldierRule({
     return false;
 }
 
+// 🚗
 export function carRule({
     chessData,
     lastChessData,
@@ -107,6 +109,7 @@ export function carRule({
         hanldeY = converData.chessY;
     }
 
+    // 判断两个坐标是否在一条条线
     const judgments = [
         lastChessX !== hanldeX && lastChessY === hanldeY,
         lastChessX === hanldeX && lastChessY !== hanldeY,
@@ -121,8 +124,9 @@ export function carRule({
         left: hanldeX - radius.value,
     };
 
-    chessPieces?.forEach((p) => {
+    chessPieces?.every((p) => {
         const pChessData = convertChess(p, radius);
+        // 判断当前遍历的棋子是否 在上次点击棋子的线上
         const sameLine = judgments[0]
             ? pChessData.chessY === lastChessY
             : pChessData.chessX === lastChessX;
@@ -130,6 +134,7 @@ export function carRule({
             return false;
         }
 
+        // 判断两个棋子之间是否还有其他的棋子
         const saveJudgmentsResult = [
             lastChessX - hanldeX > 0
                 ? lastChessX > pChessData.chessX && hanldeX < pChessData.chessX
@@ -143,18 +148,6 @@ export function carRule({
             ? saveJudgmentsResult[0]
             : saveJudgmentsResult[1];
 
-        if (pChessData.chessX === 240 && pChessData.chessY === 180) {
-            console.log(
-                "????",
-                judgments[1],
-                saveJudgmentsResult[1],
-                pChessData.chessY,
-                hanldeY,
-                lastChessY
-            );
-            console.log("carRule ForEach", judgmentsResult);
-        }
-
         if (judgmentsResult) {
             result = false;
         }
@@ -163,6 +156,7 @@ export function carRule({
     return result;
 }
 
+// 🐎
 export function horseRule({
     chessData,
     lastChessData,
@@ -170,9 +164,15 @@ export function horseRule({
     hanldeY,
     radius,
 }: ChessRule): Dataset | false {
+    const { chessX: lastChessX, chessY: lastChessY } = convertChess(
+        lastChessData,
+        radius
+    );
+
     return false;
 }
 
+// 🐘
 export function elephantRule({
     chessData,
     lastChessData,
@@ -183,6 +183,7 @@ export function elephantRule({
     return false;
 }
 
+// 仕
 export function bodyguardRule({
     chessData,
     lastChessData,
@@ -193,6 +194,7 @@ export function bodyguardRule({
     return false;
 }
 
+// 将
 export function generalRule({
     chessData,
     lastChessData,
