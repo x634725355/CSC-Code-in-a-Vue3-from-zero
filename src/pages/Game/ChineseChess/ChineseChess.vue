@@ -125,7 +125,7 @@ function chessRule({
         hanldeY,
         chessData,
         lastChessData,
-        radius,
+        radius: radius.value,
         chessPieces,
     });
 
@@ -172,7 +172,7 @@ function clickHandle(event: any) {
     });
 
     const { hanldeX, hanldeY } = calculateChessman({ offsetX, offsetY });
-    const { chessX, chessY } = convertChess(chessData!, radius);
+    const { chessX, chessY } = convertChess(chessData!, radius.value);
 
     console.log(
         `x: ${hanldeX}, y: ${hanldeY} ---- chessX: ${chessX}, chessY: ${chessY}`
@@ -183,7 +183,7 @@ function clickHandle(event: any) {
         hanldeY,
         chessData: chessData!,
         lastChessData: lastChessData!,
-        radius,
+        radius: radius.value,
         chessPieces: chessPieces.value,
     });
 

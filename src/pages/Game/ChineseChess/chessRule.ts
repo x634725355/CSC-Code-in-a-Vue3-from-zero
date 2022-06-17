@@ -7,14 +7,14 @@ const darkLine = 120;
 // 计算棋子真实坐标
 export function convertChess(
     chessData: ChessPieces | undefined | null,
-    radius: Ref<number>
+    radius: number
 ) {
     if (!chessData) {
         return { chessX: 0, chessY: 0 };
     }
 
-    const chessX = chessData.left + radius.value;
-    const chessY = chessData.top + radius.value;
+    const chessX = chessData.left + radius;
+    const chessY = chessData.top + radius;
 
     return { chessX, chessY };
 }
@@ -24,7 +24,7 @@ export interface ChessRule {
     hanldeY: number;
     chessData: ChessPieces | undefined;
     lastChessData: ChessPieces | undefined;
-    radius: Ref<number>;
+    radius: number;
     chessPieces?: ChessPieces[];
 }
 
@@ -66,8 +66,8 @@ export function soldierRule({
         case "red":
             if (judgments.red.some((p) => p)) {
                 return {
-                    top: hanldeY - radius.value,
-                    left: hanldeX - radius.value,
+                    top: hanldeY - radius,
+                    left: hanldeX - radius,
                 };
             }
 
@@ -75,8 +75,8 @@ export function soldierRule({
         case "dark":
             if (judgments.dark.some((p) => p)) {
                 return {
-                    top: hanldeY - radius.value,
-                    left: hanldeX - radius.value,
+                    top: hanldeY - radius,
+                    left: hanldeX - radius,
                 };
             }
             break;
@@ -120,8 +120,8 @@ export function carRule({
     }
 
     result = {
-        top: hanldeY - radius.value,
-        left: hanldeX - radius.value,
+        top: hanldeY - radius,
+        left: hanldeX - radius,
     };
 
     chessPieces?.every((p) => {
@@ -168,6 +168,35 @@ export function horseRule({
         lastChessData,
         radius
     );
+
+    if (chessData) {
+        const converData = convertChess(chessData, radius);
+        hanldeX = converData.chessX;
+        hanldeY = converData.chessY;
+    }
+
+    // 判断马的有效落点位置
+    const judgments = [
+        // 往上走的马
+        lastChessX - radius === hanldeX && lastChessY - radius * 2 === hanldeY,
+        lastChessX + radius === hanldeX && lastChessY - radius * 2 === hanldeY,
+
+        // 往下走的马
+        lastChessX - radius === hanldeX && lastChessY + radius * 2 === hanldeY,
+        lastChessX + radius === hanldeX && lastChessY + radius * 2 === hanldeY,
+
+        // 往右走的马
+        lastChessX + radius * 2 === hanldeX && lastChessY - radius === hanldeY,
+        lastChessX + radius * 2 === hanldeX && lastChessY + radius === hanldeY,
+
+        // 往左走的马
+        lastChessX - radius * 2 === hanldeX && lastChessY - radius === hanldeY,
+        lastChessX - radius * 2 === hanldeX && lastChessY + radius === hanldeY,
+    ];
+
+    // switch ()
+
+    
 
     return false;
 }
