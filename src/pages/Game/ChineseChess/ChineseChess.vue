@@ -76,6 +76,11 @@ function start() {
     chessPieces.value = [...darkChess, ...redChess];
 }
 
+function gameover() {
+    userRed.fall = false;
+    userDark.fall = false;
+}
+
 // 计算落点坐标
 function calculateChessman({ offsetX, offsetY }: CalculateType) {
     const chessmanLength = size.value;
@@ -129,6 +134,57 @@ function chessRule({
         chessPieces,
     });
 
+    // 两王不能见面规则
+    let redGeneral: ChessPieces;
+    let darkGeneral: ChessPieces;
+
+    chessPieces!.forEach((p) => {
+        if (p.camp === "dark" && p.name === "general") {
+            darkGeneral = p;
+        }
+
+        if (p.camp === "red" && p.name === "general") {
+            redGeneral = p;
+        }
+    });
+
+    const { chessX: redX, chessY: redY } = convertChess(
+        redGeneral!,
+        radius.value
+    );
+    const { chessX: darkX, chessY: darkY } = convertChess(
+        darkGeneral!,
+        radius.value
+    );
+    const lastConvert = convertChess(lastChessData, radius.value);
+
+    // 两个王在同一个x位置再做判断
+    if (
+        redGeneral!.left === darkGeneral!.left &&
+        redY > lastConvert.chessY &&
+        darkY < lastConvert.chessY &&
+        redX === lastConvert.chessX
+    ) {
+        const meet: ChessPieces[] = [];
+        chessPieces!.forEach((p) => {
+            const pConvert = convertChess(p, radius.value);
+
+            if (
+                redY > pConvert.chessY &&
+                darkY < pConvert.chessY &&
+                redX === pConvert.chessX
+            ) {
+                meet.push(p);
+            }
+
+            return true;
+        });
+
+        if (meet!.length === 1) {
+            result = false;
+        }
+    }
+
     if (!result) {
         return false;
     }
@@ -145,6 +201,11 @@ function chessRule({
 }
 
 function clickHandle(event: any) {
+    if (!userDark.fall && !userRed.fall) {
+        alert("看不出来谁赢了嘛 哼~");
+        return false;
+    }
+
     const { offsetX, offsetY, target } = event;
 
     const chessDataset: Dataset = target?.dataset;
@@ -194,18 +255,21 @@ function clickHandle(event: any) {
         );
         chessData.life = false;
         chessData.select = false;
+        if (chessData.name === "general") {
+            gameover();
+        }
 
         return false;
     }
 
     if (chessData!) {
-        // if (userRed.fall && chessData.camp === "dark") {
-        //     return false;
-        // }
+        if (userRed.fall && chessData.camp === "dark") {
+            return false;
+        }
 
-        // if (userDark.fall && chessData.camp === "red") {
-        //     return false;
-        // }
+        if (userDark.fall && chessData.camp === "red") {
+            return false;
+        }
 
         if (lastClickChess.value) {
             // 上次点击棋子与当前点击位置相同
