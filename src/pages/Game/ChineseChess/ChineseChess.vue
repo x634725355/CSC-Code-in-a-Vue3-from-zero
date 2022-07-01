@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { removeTypeDuplicates } from "@babel/types";
+import { throttle } from "underscore";
+
 import { ref, onMounted, reactive, handleError } from "vue";
 import { ChessPieces, configuration, chessText } from "./data";
 import {
@@ -181,7 +182,9 @@ function chessRule({
         });
 
         if (meet!.length === 1) {
-            result = false;
+            if (!result || result.left !== redGeneral!.left) {
+                result = false;
+            }
         }
     }
 
@@ -263,13 +266,13 @@ function clickHandle(event: any) {
     }
 
     if (chessData!) {
-        if (userRed.fall && chessData.camp === "dark") {
-            return false;
-        }
+        // if (userRed.fall && chessData.camp === "dark") {
+        //     return false;
+        // }
 
-        if (userDark.fall && chessData.camp === "red") {
-            return false;
-        }
+        // if (userDark.fall && chessData.camp === "red") {
+        //     return false;
+        // }
 
         if (lastClickChess.value) {
             // 上次点击棋子与当前点击位置相同
@@ -296,6 +299,8 @@ function clickHandle(event: any) {
     }
 }
 
+const clickThrottle = throttle(clickHandle, 300);
+
 function mousemoveHandle(event: MouseEvent) {
     // console.log("event", event);
 }
@@ -309,7 +314,7 @@ onMounted(() => {
 <template>
     <div class="ChineseChess">
         <div
-            @click="clickHandle"
+            @click="clickThrottle"
             @mousemove="mousemoveHandle"
             class="checkerboard"
             :style="{

@@ -59,6 +59,11 @@
   resolved "https://registry.npmmirror.com/@types/numeral/-/numeral-2.0.2.tgz#8ea2c4f4e64c0cc948ad7da375f6f827778a7912"
   integrity sha512-A8F30k2gYJ/6e07spSCPpkuZu79LCnkPTvqmIWQzNGcrzwFKpVOydG41lNt5wZXjSI149qjyzC2L1+F2PD/NUA==
 
+"@types/underscore@^1.11.4":
+  version "1.11.4"
+  resolved "http://nexus.jusdaglobal.com/repository/npm-group/@types/underscore/-/underscore-1.11.4.tgz#62e393f8bc4bd8a06154d110c7d042a93751def3"
+  integrity sha512-uO4CD2ELOjw8tasUrAhvnn2W4A0ZECOvMjCivJr4gA9pGgjv+qxKWY9GLTMVEK8ej85BxQOocUyE7hImmSQYcg==
+
 "@vitejs/plugin-vue@^2.2.0":
   version "2.2.4"
   resolved "http://nexus.jusdaglobal.com/repository/npm-group/@vitejs/plugin-vue/-/plugin-vue-2.2.4.tgz#ab8b199ca82496b05d2654c5f34ffcf9b947243d"
@@ -1037,6 +1042,11 @@ typescript@^4.5.4:
   version "4.6.2"
   resolved "http://nexus.jusdaglobal.com/repository/npm-group/typescript/-/typescript-4.6.2.tgz#fe12d2727b708f4eef40f51598b3398baa9611d4"
   integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
+
+underscore@^1.13.4:
+  version "1.13.4"
+  resolved "http://nexus.jusdaglobal.com/repository/npm-group/underscore/-/underscore-1.13.4.tgz#7886b46bbdf07f768e0052f1828e1dcab40c0dee"
+  integrity sha512-BQFnUDuAQ4Yf/cYY5LNrK9NCJFKriaRbD9uR1fTeXnBeoa97W0i41qkZfGO9pSo8I5KzjAcSY2XYtdf0oKd7KQ==
 
 upath@^2.0.1:
   version "2.0.1"

@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import html2canvas from "html2canvas";
 
+const text = ref('');
 const copyImg = ref<HTMLCanvasElement>();
 
 async function start() {
@@ -32,6 +33,14 @@ async function start() {
     copyCtx?.putImageData(changeData, 0, 0);
 }
 
+function clickHandle(event: MouseEvent) {
+    event.preventDefault();
+}
+
+function moveEnd(obj: MouseEvent) {
+    
+}
+
 onMounted(() => {
     start();
 });
@@ -44,10 +53,24 @@ onMounted(() => {
         </div>
 
         <canvas width="170" height="180" id="copy"></canvas>
+
+        <div >
+            <input v-model="text" @click="moveEnd" class="momo" type="text">
+        </div>
     </div>
 </template>
 
 <style lang="less" scoped>
 .Demo {
 }
+
+.momo {
+    padding: 8px;
+    text-align: end;
+    border: 1px solid skyblue;
+    font-size: 18px;
+    height: 30px;
+    width: 200px;
+}
+
 </style>
