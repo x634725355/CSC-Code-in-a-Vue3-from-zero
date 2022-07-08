@@ -107,7 +107,7 @@ function initCanvas() {
 
     textCtx!.textAlign = "left";
     textCtx!.textBaseline = "top";
-    textCtx!.font = "42px 'Microsoft YaHei'";
+    textCtx!.font = "100px 'Microsoft YaHei'";
     textCtx!.fillStyle = "#222222";
     textCtx?.fillText("澄三彩", 0, 10);
 }
@@ -230,11 +230,11 @@ onMounted(() => {
             <div class="technology" ref="heading">澄三彩</div>
             <canvas
                 v-on:click="onClickHandle"
-                width="126"
-                height="63"
+                width="300"
+                height="150"
                 ref="textCanvas"
             ></canvas>
-            <canvas width="252" height="126" ref="particlesCanvas"></canvas>
+            <canvas width="300" height="150" ref="particlesCanvas"></canvas>
         </div>
     </div>
 </template>
@@ -247,7 +247,7 @@ onMounted(() => {
         position: relative;
     }
     .technology {
-        font-size: 21px;
+        font-size: 100px;
         font-weight: normal;
         position: relative;
         z-index: 100;
