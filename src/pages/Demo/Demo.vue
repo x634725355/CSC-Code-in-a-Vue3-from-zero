@@ -191,7 +191,7 @@ function animate(t: number) {
         p.y = p.y - (Math.sin(p.counter) / 25) * p.waveSize;
         p.y -= p.speed;
 
-        particlesCtx!.fillRect(p.x, p.y, 4, 4);
+        particlesCtx!.fillRect(p.x, p.y, 2, 2);
         if (p.counter > p.life) resetParticle(p);
     }
 
@@ -227,7 +227,7 @@ onMounted(() => {
         <canvas width="170" height="180" id="copy"></canvas>
 
         <div class="box">
-            <!-- <div class="technology" ref="heading">澄三彩</div> -->
+            <div class="technology" ref="heading">澄三彩</div>
             <canvas
                 v-on:click="onClickHandle"
                 width="300"
