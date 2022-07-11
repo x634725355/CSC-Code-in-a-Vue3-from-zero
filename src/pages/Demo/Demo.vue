@@ -109,21 +109,21 @@ function initCanvas() {
     textCtx!.textBaseline = "top";
     textCtx!.font = "100px 'Microsoft YaHei'";
     textCtx!.fillStyle = "#222222";
-    textCtx?.fillText("澄三彩", 0, 10);
+    textCtx?.fillText("澄三彩", 0, 24);
 }
 
 function getTextImageData() {
     const pix = textCtx!.getImageData(
         0,
         0,
-        width.value * 2,
-        height.value * 2
+        width.value,
+        height.value
     ).data;
 
     for (let i = pix.length; i >= 0; i -= 4) {
         if (pix[i] != 0) {
-            let x = ((i / 8) % width.value) * 2;
-            let y = Math.floor(Math.floor(i / width.value) / 8);
+            let x = ((i / 4) % width.value);
+            let y = Math.floor(Math.floor(i / width.value) / 4);
 
             if (x && y) {
                 textPixels.push({
@@ -164,8 +164,8 @@ function launchParticles(i: number) {
     const d = 20;
     for (let pi = i; pi < textPixels.length; pi += d) {
         launchParticle(
-            textPixels[pi].x - 2 + width.value,
-            textPixels[pi].y - 2 + height.value
+            textPixels[pi].x - 2,
+            textPixels[pi].y - 2
         );
     }
 
@@ -188,10 +188,10 @@ function animate(t: number) {
         particlesCtx!.fillStyle = p.color;
         p.counter += increase;
         p.x += p.speed;
-        // p.y = p.y - (Math.sin(p.counter) / 25) * p.waveSize;
+        p.y = p.y - (Math.sin(p.counter) / 25) * p.waveSize;
         p.y -= p.speed;
 
-        particlesCtx!.fillRect(p.x, p.y, 1, 1);
+        particlesCtx!.fillRect(p.x, p.y, 4, 4);
         if (p.counter > p.life) resetParticle(p);
     }
 
@@ -227,7 +227,7 @@ onMounted(() => {
         <canvas width="170" height="180" id="copy"></canvas>
 
         <div class="box">
-            <div class="technology" ref="heading">澄三彩</div>
+            <!-- <div class="technology" ref="heading">澄三彩</div> -->
             <canvas
                 v-on:click="onClickHandle"
                 width="300"
@@ -243,7 +243,7 @@ onMounted(() => {
 .Demo {
     .box {
         margin-top: 100px;
-        margin-left: 100px;
+        margin-left: 150px;
         position: relative;
     }
     .technology {
