@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
+import Arknights from "./Arknights/Arknights.vue";
 
 const router = useRouter();
 </script>
@@ -14,6 +15,7 @@ const router = useRouter();
                 label="GET START!"
             />
         </main>
+        <Arknights />
     </div>
 </template>
 <style lang="less" scoped>
@@ -24,48 +26,17 @@ const router = useRouter();
     position: relative;
     background-color: #424642;
 
-    &::before,
-    &::after {
-        content: "";
-        width: 50%;
-        height: 3px;
-        background-color: var(--goldenColor);
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        animation-name: schedule;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-    }
-
-    &::before {
-        left: 0px;
-    }
-
-    &::after {
-        right: 0px;
-    }
 
     > main {
         position: relative;
         top: 50%;
         left: 50%;
-        z-index: 1;
+        // z-index: 1;
         transform: translate(-50%, -50%);
         display:  inline-block;
 
         .go {
             background-color: var(--goldenColor);
-        }
-    }
-
-    @keyframes schedule {
-        0% {
-            width: 0%;
-        }
-
-        100% {
-            width: 50%;
         }
     }
 }

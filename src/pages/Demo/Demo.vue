@@ -215,6 +215,7 @@ onMounted(() => {
     launchParticles(0);
     requestAnimationFrame(animate);
     changeColor();
+    textCtx?.clearRect(0, 0, 300, 150);
 });
 </script>
 
@@ -252,6 +253,7 @@ onMounted(() => {
         position: relative;
         z-index: 100;
         display: inline-block;
+        opacity: 0;
     }
 }
 </style>
