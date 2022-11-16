@@ -15,7 +15,7 @@ const router = useRouter();
                 label="GET START!"
             />
         </main>
-        <!-- <Arknights /> -->
+        <Arknights />
     </div>
 </template>
 <style lang="less" scoped>

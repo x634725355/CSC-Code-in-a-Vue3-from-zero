@@ -35,7 +35,6 @@ async function start() {
     const ctx = canvas.getContext("2d");
 
     let temp = ctx?.getImageData(0, 0, canvas.width, canvas.height);
-    console.log("changeData", temp);
 
     cutOut.appendChild(copyImg.value);
 
