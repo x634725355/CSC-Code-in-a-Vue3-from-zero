@@ -17,8 +17,6 @@ export class ParticleCanvas {
     }
     // 改变画布数据源
     changeImg(img: LogoImg) {
-        
-        console.log("%c Line:21 🎂", "color:#33a5ff", img.particleData);
         this.ParticleArr = img.particleData.map(
             (item) =>
                 new Particle({
@@ -33,7 +31,6 @@ export class ParticleCanvas {
     drawCanvas() {
         this.ctx.clearRect(0, 0, this.width, this.height);
         
-        // console.log("%c Line:34 🥟", "color:#6ec1c2", this.ParticleArr);
         this.ParticleArr.forEach(particle => {
             particle.update();
             particle.draw(this.ctx);

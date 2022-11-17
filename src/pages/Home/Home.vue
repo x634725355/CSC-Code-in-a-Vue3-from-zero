@@ -1,6 +1,12 @@
 <script lang="ts" setup>
+import { defineAsyncComponent } from "vue";
 import { useRouter } from "vue-router";
 import Arknights from "./Arknights/Arknights.vue";
+
+const AsyncComp = defineAsyncComponent({
+    loader: () => import("./Arknights/Arknights.vue"),
+    delay: 2000
+})
 
 const router = useRouter();
 </script>
@@ -15,7 +21,7 @@ const router = useRouter();
                 label="GET START!"
             />
         </main>
-        <Arknights />
+        <AsyncComp />
     </div>
 </template>
 <style lang="less" scoped>

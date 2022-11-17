@@ -27,7 +27,7 @@ let context = ref<CanvasRenderingContext2D | null>(null);
 /** canvas实体对象 */
 let particleCanvas = ref<ParticleCanvas>();
 
-function getImageData(src: string) {}
+const currentLogo = ref<LogoImg>(logoImgs[0]);
 
 function start() {
     if (canvas.value) {
@@ -38,6 +38,12 @@ function start() {
     }
 }
 
+// 激活logo
+function clickLogo(prt_canvas: ParticleCanvas, logoItem: LogoImg) {
+  prt_canvas.changeImg(logoItem);
+  currentLogo.value = logoItem;
+}
+
 // 将logo数据实例化为logoImg对象
 for (let item of logos) {
     logoImgs.push(new LogoImg(item.url, item.label));
@@ -46,7 +52,7 @@ for (let item of logos) {
 onMounted(() => {
     setTimeout(() => {
         start();
-    }, 2000)
+    }, 2000);
 });
 </script>
 
@@ -54,6 +60,23 @@ onMounted(() => {
     <div class="Arknights">
         <main>
             <canvas ref="canvas" :width="width" :height="height"></canvas>
+            
+            <q-tabs
+                narrow-indicator
+                dense
+                align="justify"
+                class="text-primary"
+            >
+                <q-tab
+                    v-for="item in logoImgs"
+                    :ripple="false"
+                    :name="item.name"
+                    :label="item.name"
+                    @click="clickLogo(particleCanvas!, item)"
+                >
+                    <q-img :src="item.src" spinner-color="white" />
+                </q-tab>
+            </q-tabs>
         </main>
     </div>
 </template>

@@ -46,7 +46,8 @@ export class Particle implements ParticleType {
     draw(context: CanvasRenderingContext2D) {
         context.beginPath();
         context.fillStyle = `rgba(${this.color.toString()})`;
-        context.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
+        context.fillRect(this.x, this.y, this.radius * 2, this.radius * 2);
+        // arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
         context.fill();
         context.closePath();
     }

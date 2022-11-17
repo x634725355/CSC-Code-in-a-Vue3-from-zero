@@ -34,38 +34,38 @@ export class LogoImg {
             temp_ctx?.clearRect(0, 0, imgW, imgH);
 
             // 筛选像素点
-            // for (let y = 0; y < imgH; y += 5) {
-            //     for (let x = 0; x < imgW; x += 5) {
-            //         // 像素点的序号
-            //         const index = (x + y * imgW) * 4;
-            //         // 在数组中对应的值
-            //         const r = imgData![index];
-            //         const g = imgData![index + 1];
-            //         const b = imgData![index + 2];
-            //         const a = imgData![index + 3];
-            //         const sum = r + g + b + a;
-            //         // 筛选条件
-            //         if (sum >= 100) {
-            //             const particle = new Particle({ totalX: x, totalY: y, color: [r, g, b, a], time: animateTime });
-            //             this.particleData.push(particle);
-            //         }
-            //     }
-            // }
-
-            for(let index = 0; index < imgData!.length; index += 50) {
-                const r = imgData![index];
-                const g = imgData![index + 1];
-                const b = imgData![index + 2];
-                const a = imgData![index + 3];
-                const sum = r + g + b + a;
-                // 筛选条件
-                if (sum >= 100) {
-                    const x = Math.floor((index / 4) % imgW);
-                    const y = Math.floor(index / imgW / 4);
-                    const particle = new Particle({ totalX: x, totalY: y, color: [r, g, b, a], time: animateTime });
-                    this.particleData.push(particle);
+            for (let y = 0; y < imgH; y += 5) {
+                for (let x = 0; x < imgW; x += 5) {
+                    // 像素点的序号
+                    const index = (x + y * imgW) * 4;
+                    // 在数组中对应的值
+                    const r = imgData![index];
+                    const g = imgData![index + 1];
+                    const b = imgData![index + 2];
+                    const a = imgData![index + 3];
+                    const sum = r + g + b + a;
+                    // 筛选条件
+                    if (sum >= 100) {
+                        const particle = new Particle({ totalX: x, totalY: y, color: [r, g, b, a], time: animateTime });
+                        this.particleData.push(particle);
+                    }
                 }
             }
+
+            // for(let index = 0; index < imgData!.length; index += 50) {
+            //     const r = imgData![index];
+            //     const g = imgData![index + 1];
+            //     const b = imgData![index + 2];
+            //     const a = imgData![index + 3];
+            //     const sum = r + g + b + a;
+            //     // 筛选条件
+            //     if (sum >= 100) {
+            //         const x = Math.floor((index / 4) % imgW);
+            //         const y = Math.floor(index / imgW / 4);
+            //         const particle = new Particle({ totalX: x, totalY: y, color: [r, g, b, a], time: animateTime });
+            //         this.particleData.push(particle);
+            //     }
+            // }
         };
     }
 }
