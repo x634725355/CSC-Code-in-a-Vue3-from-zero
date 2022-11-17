@@ -16,6 +16,7 @@ type ParticleType = {
 }
 
 type ParticleConstructor = Pick<ParticleType, 'color' | 'time' | 'totalX' | 'totalY'>;
+type ChangeType = Omit<ParticleConstructor, 'time'>;
 
 export class Particle implements ParticleType {
     x: number; // 粒子x轴的初始位置
@@ -65,5 +66,9 @@ export class Particle implements ParticleType {
         if (this.opacity < 1) this.opacity += opacityStep;
     }
     // 切换粒子
-    change() {}
+    change({ color, totalX, totalY }: ChangeType) {
+        this.totalX = totalX;
+        this.totalY = totalY;
+        this.color = [...color];
+    }
 }

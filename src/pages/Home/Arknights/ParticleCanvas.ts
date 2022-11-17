@@ -1,4 +1,4 @@
-import { LogoImg } from "./LogoImg";
+import { animateTime, LogoImg } from "./LogoImg";
 import { Particle } from "./Particle";
 
 // 画布类
@@ -17,21 +17,44 @@ export class ParticleCanvas {
     }
     // 改变画布数据源
     changeImg(img: LogoImg) {
-        this.ParticleArr = img.particleData.map(
-            (item) =>
-                new Particle({
-                    color: item.color,
-                    time: item.time,
-                    totalX: item.totalX,
-                    totalY: item.totalY,
-                })
-        );
+        if (this.ParticleArr.length) {
+            let newArray = img.particleData;
+            let newLen = newArray.length;
+            let arr = this.ParticleArr;
+            let oldLen = arr.length;
+
+            for (let i = 0; i < newLen; i++) {
+                const { totalX, totalY, color } = newArray[i];
+                if (arr[i]) {
+                    arr[i].change({ totalX, totalY, color });
+                } else {
+                    arr[i] = new Particle({
+                        color,
+                        time: animateTime,
+                        totalX,
+                        totalY,
+                    });
+                }
+            }
+
+            if (newLen < oldLen) this.ParticleArr = arr.splice(0, newLen);
+        } else {
+            this.ParticleArr = img.particleData.map(
+                (item) =>
+                    new Particle({
+                        color: item.color,
+                        time: item.time,
+                        totalX: item.totalX,
+                        totalY: item.totalY,
+                    })
+            );
+        }
     }
     // 画布绘制方法
     drawCanvas() {
         this.ctx.clearRect(0, 0, this.width, this.height);
-        
-        this.ParticleArr.forEach(particle => {
+
+        this.ParticleArr.forEach((particle) => {
             particle.update();
             particle.draw(this.ctx);
         });

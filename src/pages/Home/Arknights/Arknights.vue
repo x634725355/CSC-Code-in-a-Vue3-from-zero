@@ -8,6 +8,9 @@ import logo_yan from "@/assets/logo_yan.png";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { Particle } from "./Particle";
 import { width, height, LogoImg } from "./LogoImg";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 // 准备logo数据
 const logos = reactive([
@@ -40,8 +43,8 @@ function start() {
 
 // 激活logo
 function clickLogo(prt_canvas: ParticleCanvas, logoItem: LogoImg) {
-  prt_canvas.changeImg(logoItem);
-  currentLogo.value = logoItem;
+    prt_canvas.changeImg(logoItem);
+    currentLogo.value = logoItem;
 }
 
 // 将logo数据实例化为logoImg对象
@@ -59,28 +62,65 @@ onMounted(() => {
 <template>
     <div class="Arknights">
         <main>
-            <canvas ref="canvas" :width="width" :height="height"></canvas>
-            
-            <q-tabs
-                narrow-indicator
-                dense
-                align="justify"
-                class="text-primary"
-            >
-                <q-tab
-                    v-for="item in logoImgs"
-                    :ripple="false"
-                    :name="item.name"
-                    :label="item.name"
-                    @click="clickLogo(particleCanvas!, item)"
-                >
-                    <q-img :src="item.src" spinner-color="white" />
-                </q-tab>
-            </q-tabs>
+            <q-btn
+                @click="() => router.push('/Game/FiveInRow')"
+                class="go"
+                text-color="black"
+                label="GET START!"
+            />
+
+            <div class="canvasLogo" >
+                <canvas ref="canvas" :width="width" :height="height"></canvas>
+            </div>
+
+            <footer class="footer" >
+                <q-tabs narrow-indicator dense align="justify" class="text-primary">
+                    <q-tab
+                        v-for="item in logoImgs"
+                        :ripple="false"
+                        :name="item.name"
+                        @click="clickLogo(particleCanvas!, item)"
+                    >
+                        <q-img
+                            :src="item.src"
+                            spinner-color="white"
+                            style="width: 200px; height: 200px;"
+                        />
+                    </q-tab>
+                </q-tabs>
+            </footer>
         </main>
     </div>
 </template>
 <style lang="less" scoped>
 .Arknights {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    > main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .go {
+            margin-top: 16px;
+            background-color: var(--goldenColor);
+        }
+
+        .canvasLogo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .footer {
+            margin-bottom: 16px;
+            height: 208px;
+        }
+    }   
+
+   
 }
 </style>

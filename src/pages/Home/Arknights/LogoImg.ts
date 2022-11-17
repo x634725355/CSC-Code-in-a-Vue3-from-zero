@@ -51,21 +51,6 @@ export class LogoImg {
                     }
                 }
             }
-
-            // for(let index = 0; index < imgData!.length; index += 50) {
-            //     const r = imgData![index];
-            //     const g = imgData![index + 1];
-            //     const b = imgData![index + 2];
-            //     const a = imgData![index + 3];
-            //     const sum = r + g + b + a;
-            //     // 筛选条件
-            //     if (sum >= 100) {
-            //         const x = Math.floor((index / 4) % imgW);
-            //         const y = Math.floor(index / imgW / 4);
-            //         const particle = new Particle({ totalX: x, totalY: y, color: [r, g, b, a], time: animateTime });
-            //         this.particleData.push(particle);
-            //     }
-            // }
         };
     }
 }

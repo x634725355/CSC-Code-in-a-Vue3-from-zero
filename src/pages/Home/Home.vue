@@ -1,26 +1,16 @@
 <script lang="ts" setup>
 import { defineAsyncComponent } from "vue";
-import { useRouter } from "vue-router";
-import Arknights from "./Arknights/Arknights.vue";
 
 const AsyncComp = defineAsyncComponent({
     loader: () => import("./Arknights/Arknights.vue"),
     delay: 2000
 })
 
-const router = useRouter();
+
 </script>
 
 <template>
     <div class="Home">
-        <main>
-            <q-btn
-                @click="() => router.push('/Game/FiveInRow')"
-                class="go"
-                text-color="black"
-                label="GET START!"
-            />
-        </main>
         <AsyncComp />
     </div>
 </template>
@@ -31,19 +21,5 @@ const router = useRouter();
     padding: 0px 10%;
     position: relative;
     background-color: #424642;
-
-
-    > main {
-        position: relative;
-        top: 50%;
-        left: 50%;
-        // z-index: 1;
-        transform: translate(-50%, -50%);
-        display:  inline-block;
-
-        .go {
-            background-color: var(--goldenColor);
-        }
-    }
 }
 </style>
