@@ -8,12 +8,17 @@ export class ParticleCanvas {
     width: number;
     height: number;
     ParticleArr: Particle[];
+    pointerX: number | null;
+    pointerY: number | null;
+
     constructor(target: HTMLCanvasElement) {
         this.canvasEle = target;
         this.ctx = target.getContext("2d") as CanvasRenderingContext2D;
         this.width = target.width;
         this.height = target.height;
         this.ParticleArr = [];
+        this.pointerX = null;
+        this.pointerY = null;
     }
     // 改变画布数据源
     changeImg(img: LogoImg) {
@@ -55,7 +60,7 @@ export class ParticleCanvas {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         this.ParticleArr.forEach((particle) => {
-            particle.update();
+            particle.update(this.pointerX, this.pointerY);
             particle.draw(this.ctx);
         });
 

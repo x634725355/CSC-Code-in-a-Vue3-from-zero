@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, onUnmounted, reactive, ref } from "vue";
 import logo_kazimierz from "@/assets/logo_kazimierz.png";
 import logo_rhine from "@/assets/logo_rhine.png";
 import logo_rhodes from "@/assets/logo_rhodes.png";
 import logo_victoria from "@/assets/logo_victoria.png";
 import logo_yan from "@/assets/logo_yan.png";
 import { ParticleCanvas } from "./ParticleCanvas";
-import { Particle } from "./Particle";
 import { width, height, LogoImg } from "./LogoImg";
 import { useRouter } from "vue-router";
 
@@ -21,6 +20,7 @@ const logos = reactive([
     { label: "yan", url: logo_yan },
 ]);
 
+const timeout = ref<NodeJS.Timeout>();
 /** 存储由logos生成的logoImg对象 */
 const logoImgs = <LogoImg[]>reactive([]);
 // 获取canvas画布
@@ -32,9 +32,18 @@ let particleCanvas = ref<ParticleCanvas>();
 
 const currentLogo = ref<LogoImg>(logoImgs[0]);
 
+function canvasMove(event: MouseEvent) {
+    console.log("%c Line:37 🍔", "color:#7f2b82", event);
+    const { offsetX, offsetY } = event;
+
+    particleCanvas.value!.pointerX = offsetX;
+    particleCanvas.value!.pointerY = offsetY;
+}
+
 function start() {
     if (canvas.value) {
         context.value = canvas.value.getContext("2d");
+        canvas.value.addEventListener('mousemove', canvasMove)
         particleCanvas.value = new ParticleCanvas(canvas.value);
         particleCanvas.value.changeImg(logoImgs[0]);
         particleCanvas.value.drawCanvas();
@@ -53,10 +62,19 @@ for (let item of logos) {
 }
 
 onMounted(() => {
-    setTimeout(() => {
+    if (timeout.value) {
+        clearTimeout(timeout.value);
+    }
+    timeout.value = setTimeout(() => {
         start();
     }, 2000);
 });
+
+onUnmounted(() => {
+    if (timeout.value) {
+        clearTimeout(timeout.value);
+    }
+})
 </script>
 
 <template>

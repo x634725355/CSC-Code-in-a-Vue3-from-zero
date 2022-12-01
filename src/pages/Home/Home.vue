@@ -3,10 +3,8 @@ import { defineAsyncComponent } from "vue";
 
 const AsyncComp = defineAsyncComponent({
     loader: () => import("./Arknights/Arknights.vue"),
-    delay: 2000
-})
-
-
+    delay: 2000,
+});
 </script>
 
 <template>
@@ -18,8 +16,9 @@ const AsyncComp = defineAsyncComponent({
 .Home {
     width: 100vw;
     height: 100vh;
-    padding: 0px 10%;
     position: relative;
     background-color: #424642;
+    cursor: url(src/assets/mouse.png) 4 4, default;
 }
+
 </style>
