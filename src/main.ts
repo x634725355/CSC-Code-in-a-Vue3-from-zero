@@ -7,6 +7,7 @@ import { router } from "@/router/routes"
 import App from './App.vue'
 
 import './main.less'
+import 'animate.css';
 
 const app = createApp(App)
 

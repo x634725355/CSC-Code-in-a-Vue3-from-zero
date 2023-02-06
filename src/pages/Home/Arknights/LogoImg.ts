@@ -1,8 +1,8 @@
 import { Particle } from "./Particle";
 
 // 设置画布大小
-export const width = 400,
-    height = 400;
+export const width = 500,
+    height = 500;
 
 // 设置粒子动画时长
 export const animateTime = 30;
@@ -34,8 +34,8 @@ export class LogoImg {
             temp_ctx?.clearRect(0, 0, imgW, imgH);
 
             // 筛选像素点
-            for (let y = 0; y < imgH; y += 4) {
-                for (let x = 0; x < imgW; x += 4) {
+            for (let y = 0; y < imgH; y += 5) {
+                for (let x = 0; x < imgW; x += 5) {
                     // 像素点的序号
                     const index = (x + y * imgW) * 4;
                     // 在数组中对应的值

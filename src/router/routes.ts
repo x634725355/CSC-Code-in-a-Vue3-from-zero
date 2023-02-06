@@ -20,13 +20,11 @@ export const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: "FiveInRow",
-                // component: import("@/pages/Game/FiveInRow/FiveInRow.vue"),
                 component: FiveInRow,
-                name: "污渍棋",
+                name: "五子棋",
             },
             {
                 path: "ChineseChess",
-                // component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
                 component: ChineseChess,
                 name: "象棋",
             },

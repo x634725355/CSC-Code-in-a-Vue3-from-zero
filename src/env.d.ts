@@ -8,6 +8,7 @@ declare module '*.jpeg';
 declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
+declare module '*.ico';
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

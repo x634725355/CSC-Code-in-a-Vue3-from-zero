@@ -1,3 +1,4 @@
+import { Ref } from "vue";
 import { animateTime, LogoImg } from "./LogoImg";
 import { Particle } from "./Particle";
 
@@ -42,28 +43,29 @@ export class ParticleCanvas {
                 }
             }
 
-            if (newLen < oldLen) this.ParticleArr = arr.splice(0, newLen);
+            if (newLen < oldLen) this.ParticleArr = arr.slice(0, newLen);
         } else {
-            this.ParticleArr = img.particleData.map(
-                (item) =>
-                    new Particle({
-                        color: item.color,
-                        time: item.time,
-                        totalX: item.totalX,
-                        totalY: item.totalY,
-                    })
-            );
+            // this.ParticleArr = img.particleData.map(
+            //     (item) =>
+            //         new Particle({
+            //             color: item.color,
+            //             time: item.time,
+            //             totalX: item.totalX,
+            //             totalY: item.totalY,
+            //         })
+            // );
+            this.ParticleArr = img.particleData;
         }
     }
     // 画布绘制方法
-    drawCanvas() {
+    drawCanvas(timeObj: any) {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         this.ParticleArr.forEach((particle) => {
-            particle.update(this.pointerX, this.pointerY);
+            particle.update(this.pointerX!, this.pointerY!);
             particle.draw(this.ctx);
         });
 
-        window.requestAnimationFrame(() => this.drawCanvas());
+        timeObj.time = window.requestAnimationFrame(() => this.drawCanvas(timeObj));
     }
 }
