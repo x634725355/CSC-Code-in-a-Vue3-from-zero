@@ -266,13 +266,13 @@ function clickHandle(event: any) {
     }
 
     if (chessData!) {
-        // if (userRed.fall && chessData.camp === "dark") {
-        //     return false;
-        // }
+        if (userRed.fall && chessData.camp === "dark") {
+            return false;
+        }
 
-        // if (userDark.fall && chessData.camp === "red") {
-        //     return false;
-        // }
+        if (userDark.fall && chessData.camp === "red") {
+            return false;
+        }
 
         if (lastClickChess.value) {
             // 上次点击棋子与当前点击位置相同

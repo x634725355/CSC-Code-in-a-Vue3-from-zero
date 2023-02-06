@@ -296,12 +296,8 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="box">
-        <div class="chessboard">
-            <canvas id="chessboard" width="600" height="600"></canvas>
-        </div>
-
         <div class="gameInfo">
-            <p>污渍棋</p>
+            <p>五子棋</p>
             <button class="start" v-on:click="start">重新开局</button>
             <p>
                 <span>请</span>
@@ -315,7 +311,7 @@ onBeforeUnmount(() => {
                     class="blackChess"
                     >黑子</span
                 >
-                <span>说话</span>
+                <span>下手</span>
             </p>
             <p v-show="checkerboardParameter.victory">
                 <span>获胜滴是</span>
@@ -331,6 +327,10 @@ onBeforeUnmount(() => {
                 >
             </p>
         </div>
+
+        <div class="chessboard">
+            <canvas id="chessboard" width="600" height="600"></canvas>
+        </div>
     </div>
 </template>
 
@@ -341,12 +341,11 @@ onBeforeUnmount(() => {
     max-width: 80vw;
     padding: 5px;
     border: 1px solid #42b983;
-    background-color: pink;
-    display: flex;
 }
 
 canvas {
     border: 1px solid #5463ff;
+    background-color: #ffd36e;
 }
 
 .chessboard {
@@ -369,7 +368,7 @@ canvas {
     }
 
     .whiteChess {
-        color: #fdfaf6;
+        color: #B6EADA;
         font-size: 40px;
         font-weight: 600;
     }
