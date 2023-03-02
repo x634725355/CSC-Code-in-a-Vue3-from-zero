@@ -2,10 +2,9 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 import Home from "@/pages/Home/Home.vue";
 import Game from "@/pages/Game/Game.vue";
-import FiveInRow from "@/pages/Game/FiveInRow/FiveInRow.vue";
+// import FiveInRow from "@/pages/Game/FiveInRow/FiveInRow.vue";
 import ChineseChess from "@/pages/Game/ChineseChess/ChineseChess.vue";
-
-import PhoneUpglide from "@/pages/PhoneUpglide/PhoneUpglide.vue";
+import Upload from "@/pages/Upload/Upload.vue";
 import AppleAnime from "@/pages/AppleAnime/AppleAnime.vue";
 
 import Demo from "@/pages/Demo/Demo.vue";
@@ -16,16 +15,16 @@ export const routes: RouteRecordRaw[] = [
     {
         path: "/Game/",
         name: "游戏",
-        component: Game,
+        component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
         children: [
             {
                 path: "FiveInRow",
-                component: FiveInRow,
+                component: import("@/pages/Game/FiveInRow/FiveInRow.vue"),
                 name: "五子棋",
             },
             {
                 path: "ChineseChess",
-                component: ChineseChess,
+                component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
                 name: "象棋",
             },
         ],
@@ -35,7 +34,7 @@ export const routes: RouteRecordRaw[] = [
         component: AppleAnime,
         name: "🍎 动画",
     },
-    { path: "/PhoneUpglide", component: PhoneUpglide, name: "PhoneUpglide" },
+    { path: "/Upload", component: Upload, name: "Upload" },
     { path: "/Demo", component: Demo, name: "Demo" },
 ];
 
