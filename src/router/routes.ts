@@ -2,7 +2,7 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 import Home from "@/pages/Home/Home.vue";
 import Game from "@/pages/Game/Game.vue";
-// import FiveInRow from "@/pages/Game/FiveInRow/FiveInRow.vue";
+import FiveInRow from "@/pages/Game/FiveInRow/FiveInRow.vue";
 import ChineseChess from "@/pages/Game/ChineseChess/ChineseChess.vue";
 import Upload from "@/pages/Upload/Upload.vue";
 import AppleAnime from "@/pages/AppleAnime/AppleAnime.vue";
@@ -15,16 +15,16 @@ export const routes: RouteRecordRaw[] = [
     {
         path: "/Game/",
         name: "游戏",
-        component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
+        component: Game,
         children: [
             {
                 path: "FiveInRow",
-                component: import("@/pages/Game/FiveInRow/FiveInRow.vue"),
+                component: FiveInRow,
                 name: "五子棋",
             },
             {
                 path: "ChineseChess",
-                component: import("@/pages/Game/ChineseChess/ChineseChess.vue"),
+                component: ChineseChess,
                 name: "象棋",
             },
         ],
