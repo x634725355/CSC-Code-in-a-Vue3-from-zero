@@ -1,19 +1,8 @@
 import { boot } from "quasar/wrappers";
 import axios, { AxiosInstance } from "axios";
 
-
-export class Request {
-    private initConfig: RequestInit;
-    public url: string;
-    public contentType: string;
-
-    constructor() {}
-
-    getFetch() {}
-}
-
-const baseURL =
-  process.env.NODE_ENV === 'development' ? '/' : 'https://yiyun.eki.space';
+export const baseURL =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:7777/' : 'https://yiyun.eki.space';
 
 const api = axios.create({ baseURL });
 
