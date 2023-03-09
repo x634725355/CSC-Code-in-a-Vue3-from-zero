@@ -47,10 +47,7 @@ export async function getList() {
 
     const result = await client.list({
         "max-keys": 100,
-    }, {
-        timeout: 2000
-    });
-    // console.log(result);
+    }, {});
 
     return result;
 }

@@ -1,21 +1,23 @@
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
-import { Quasar, quasarLang } from "./config";
+import { Quasar, quasarLang, Notify } from "./config";
 
-import { router } from "@/router/routes"
+import { router } from "@/router/routes";
 
-import App from './App.vue'
+import App from "./App.vue";
 
-import './main.less'
-import 'animate.css';
+import "./main.less";
+import "animate.css";
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router)
+app.use(router);
 
 app.use(Quasar, {
-    plugin: {},
-    lang: quasarLang
-})
+    plugins: {
+        Notify,
+    },
+    lang: quasarLang,
+});
 
-app.mount('#app')
+app.mount("#app");

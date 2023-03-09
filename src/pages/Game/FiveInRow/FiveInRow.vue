@@ -171,9 +171,7 @@ function findChessman({ array, base, x, y, state }: findFunc): boolean {
         array.push(
             `{"x": ${moveChessX}, "y": ${moveChessY}, "state": ${state}}`
         );
-        // console.log('true', findWay.value, array, `moveChessX: ${moveChessX}, moveChessY: ${moveChessY}`);
     } else {
-        // console.log('false', findWay.value, array, `moveChessX: ${moveChessX}, moveChessY: ${moveChessY}`);
         moveChessX = firstX;
         moveChessY = firstY;
         findWay.value++;
@@ -244,7 +242,6 @@ function calculateChessman({ offsetX, offsetY }: calculateType) {
 
 // 重新开始
 function start() {
-    console.log("重新");
     checkerboardParameter.chessboard = [];
     checkerboardParameter.victory = false;
     checkerboardParameter.holdChessman = false;

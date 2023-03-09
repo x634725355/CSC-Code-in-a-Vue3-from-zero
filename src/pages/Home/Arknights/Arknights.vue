@@ -1,21 +1,16 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, reactive, ref } from "vue";
-import logo_kazimierz from "@/assets/logo_kazimierz.png";
-import logo_rhine from "@/assets/logo_rhine.png";
-import logo_rhodes from "@/assets/logo_rhodes.png";
-import logo_victoria from "@/assets/logo_victoria.png";
-import logo_yan from "@/assets/logo_yan.png";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { width, height, LogoImg } from "./LogoImg";
 
-const oneImage = { label: "kazimierz", url: logo_kazimierz };
+const oneImage = { label: "kazimierz", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/07881d89cca875a99daa.png' };
 // 准备logo数据
 const logos = reactive([
-    { label: "rhine", url: logo_rhine },
-    { label: "kazimierz", url: logo_kazimierz },
-    { label: "rhodes", url: logo_rhodes },
-    { label: "victoria", url: logo_victoria },
-    { label: "yan", url: logo_yan },
+    { label: "rhine", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/31aa10b8fea8a1b917bb.png' },
+    { label: "rhodes", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/bb9bf6bbb5ab1aaad989.png' },
+    { label: "victoria", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/db9961a8e0a81b883fbb.png' },
+    { label: "yan", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/bcabcabbca9b839a4d9a.png' },
+    { label: "kazimierz", url: 'http://csc-images.oss-cn-hangzhou.aliyuncs.com/csc/image/07881d89cca875a99daa.png' },
 ]);
 
 const timeout = ref<number>();
