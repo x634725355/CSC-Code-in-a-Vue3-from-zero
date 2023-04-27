@@ -15,9 +15,10 @@ async function setList() {
     list.value = res.objects;
 }
 
-function clickCopy(url: string) {
-    copy(url);
-    Notify.create({ message: "复制成功", position: "top", color: "primary" });
+async function clickCopy(url: string) {
+    const result = await copy(url);
+    const hint = result ? '复制成功' : '复制失败, 请允许使用剪贴板';
+    Notify.create({ message: hint, position: "top", color: "primary" });
 }
 
 onMounted(() => {
