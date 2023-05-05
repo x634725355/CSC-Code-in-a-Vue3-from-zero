@@ -6,6 +6,7 @@ import FiveInRow from "@/pages/Game/FiveInRow/FiveInRow.vue";
 import ChineseChess from "@/pages/Game/ChineseChess/ChineseChess.vue";
 import Upload from "@/pages/Upload/Upload.vue";
 import AppleAnime from "@/pages/AppleAnime/AppleAnime.vue";
+import ChatRoom from "@/pages/ChatRoom/ChatRoom.vue";
 
 import Demo from "@/pages/Demo/Demo.vue";
 
@@ -28,6 +29,11 @@ export const routes: RouteRecordRaw[] = [
                 name: "象棋",
             },
         ],
+    },
+    {
+        path: "/ChatRoom",
+        component: ChatRoom,
+        name: "聊天室"
     },
     {
         path: "/AppleAnime",
