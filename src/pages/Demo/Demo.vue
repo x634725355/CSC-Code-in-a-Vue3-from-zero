@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import html2canvas from "html2canvas";
+import cat from "@/assets/mao.png";
 
 interface TextPixelsType {
     x: number;
@@ -52,6 +53,7 @@ async function start() {
 // canvas 渲染咯
 const textCanvas = ref<HTMLCanvasElement | null>(null);
 const particlesCanvas = ref<HTMLCanvasElement | null>(null);
+const imageCanvas = ref<HTMLCanvasElement | null>(null);
 const heading = ref<HTMLElement | null>(null);
 
 let textCtx: CanvasRenderingContext2D | null | undefined;
@@ -207,6 +209,16 @@ function changeColor() {
     setTimeout(changeColor, 700);
 }
 
+function catHandle() {
+    const img = new Image();
+    img.src = cat;
+    img.onload = (event) => {
+        
+        console.log("%c Line:216 🍅", "color:#42b983", event);
+        
+    }
+}
+
 onMounted(() => {
     start();
     initCanvas();
@@ -215,6 +227,8 @@ onMounted(() => {
     requestAnimationFrame(animate);
     changeColor();
     textCtx?.clearRect(0, 0, 300, 150);
+
+    catHandle();
 });
 </script>
 
@@ -235,6 +249,10 @@ onMounted(() => {
                 ref="textCanvas"
             ></canvas>
             <canvas width="300" height="150" ref="particlesCanvas"></canvas>
+        </div>
+
+        <div>
+            <canvas width="300" height="150" ref="imageCanvas" ></canvas>
         </div>
     </div>
 </template>
