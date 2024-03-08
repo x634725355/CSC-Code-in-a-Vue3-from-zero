@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import Menu from "@/components/Menu.vue";
+import Footer from "./Footer.vue";
 import { routes } from "@/router/routes";
 
 const drawerLeft = ref(true);
 
-onMounted(() => {
-   
-});
+onMounted(() => {});
 </script>
 
 <template>
     <div class="layout">
         <q-layout
-            view="hhh LpR lff"
+            view="hHh Lpr fFf"
             container
             style="height: 100vh"
             class="shadow-2 rounded-borders"
@@ -55,6 +54,9 @@ onMounted(() => {
                     <q-btn fab icon="keyboard_arrow_up" color="red" />
                 </q-page-scroller>
             </q-page-container>
+            <q-footer class="q-footer" >
+                <Footer />
+            </q-footer>
         </q-layout>
     </div>
 </template>
@@ -82,5 +84,9 @@ onMounted(() => {
     // transform: translate(-50%, -50%);
     top: 0px;
     left: 0px;
+}
+
+.q-footer {
+    background-color: white;
 }
 </style>
