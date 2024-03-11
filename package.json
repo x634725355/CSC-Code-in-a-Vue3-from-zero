@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
-        "build-s": "cross-env NODE_OPTIONS=--max-old-space-size=1536 vue-tsc --noEmit && vite build",
+        "build-s": "cross-env NODE_OPTIONS=--max-old-space-size=1000 vue-tsc --noEmit && vite build",
+        "build-v": "vite build",
         "preview": "vite preview"
     },
     "dependencies": {
