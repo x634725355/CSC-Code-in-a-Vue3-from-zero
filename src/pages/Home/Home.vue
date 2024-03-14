@@ -39,8 +39,8 @@ const AsyncComp = defineAsyncComponent({
     .box {
         flex: 1;
         height: auto;
-        opacity: 0;
-        animation: fadeIn 1s 1.8s forwards;
+        // opacity: 0;
+        // animation: fadeIn 1s 1.8s forwards;
         display: flex;
         flex-direction: column;
 
