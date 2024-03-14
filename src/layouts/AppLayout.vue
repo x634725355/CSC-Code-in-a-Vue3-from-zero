@@ -46,7 +46,7 @@ onMounted(() => {});
             </q-drawer>
 
             <q-page-container>
-                <q-page class="q-pa-md">
+                <q-page class="q-pa-md main">
                     <router-view></router-view>
                 </q-page>
 
@@ -65,6 +65,10 @@ onMounted(() => {});
 .header {
     background-color: aliceblue;
     color: black;
+}
+
+.main {
+    height: 1px;
 }
 
 .technology {

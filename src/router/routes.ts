@@ -7,11 +7,13 @@ import ChineseChess from "@/pages/Game/ChineseChess/ChineseChess.vue";
 import Upload from "@/pages/Upload/Upload.vue";
 import AppleAnime from "@/pages/AppleAnime/AppleAnime.vue";
 import ChatRoom from "@/pages/ChatRoom/ChatRoom.vue";
+import NotFoundComponent from "@/components/NotFoundComponent.vue";
 
 import Demo from "@/pages/Demo/Demo.vue";
 
 export const routes: RouteRecordRaw[] = [
     { path: "/", redirect: "/Home" },
+    { path: '/:pathMatch(.*)', component: NotFoundComponent },
     { path: "/home", component: Home, name: "首页" },
     {
         path: "/Game/",
