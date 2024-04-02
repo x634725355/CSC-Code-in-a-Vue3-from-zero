@@ -7,7 +7,8 @@ pipeline {
                 echo 'Building..'
                 sh 'pnpm i'
                 echo 'download done'
-                sh 'pnpm run build'
+                sh 'pnpm run build-v'
+                echo 'build done'
             }
         }
         stage('Test') {
@@ -18,6 +19,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                cp -r ./dist /var/www/html/csc
+                echo 'copy done'
             }
         }
     }
