@@ -1,17 +1,23 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            env.NODEJS_HOME = "${tool 'Node 21.x'}"
+            // on linux / mac
+            env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
+            sh 'npm --version'
+        }
+    }
 
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
                 nodejs('v21.7.2') {
-                    sh 'yarn install'
-                    sh 'yarn build'
+                    sh 'npm install'
                 }
                 echo 'download done'
                 nodejs('v21.7.2') {
-                    sh 'pnpm run build-v'
+                    sh 'npm run build-v'
                 }
                 echo 'build done'
             }
