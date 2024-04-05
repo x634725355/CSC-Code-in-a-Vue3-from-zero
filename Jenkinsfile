@@ -5,10 +5,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh 'npm -v'
-                sh 'npm i'
+                sh '${pnpm} -v'
+                sh '${pnpm} i'
                 echo 'download done'
-                sh 'npm run build-v'
+                sh '${pnpm} run build-v'
                 echo 'build done'
             }
         }
