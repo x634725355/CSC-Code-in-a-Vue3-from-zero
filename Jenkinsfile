@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-         image 'node'
-    }
+    agent any
 
     stages {
         stage('Build') {
