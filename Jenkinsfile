@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                cp -r ./dist /var/www/html/csc
+                sh 'cp -r ./dist /var/www/html/csc'
                 echo 'copy done'
             }
         }
