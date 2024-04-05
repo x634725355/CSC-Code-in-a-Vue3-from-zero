@@ -1,9 +1,7 @@
 pipeline {
     agent {
-        node {
-            tools {
-                nodejs 'node21' 
-            }
+        tools {
+            nodejs 'node21' 
         }
     }
 
