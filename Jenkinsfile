@@ -1,10 +1,9 @@
 pipeline {
     agent {
         node {
-            env.NODEJS_HOME = "${tool 'Node 21.x'}"
-            // on linux / mac
-            env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
-            sh 'npm --version'
+            tools {
+                nodejs 'node21' 
+            }
         }
     }
 
@@ -13,6 +12,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 nodejs('v21.7.2') {
+                    sh 'pnpm -v'
                     sh 'npm install'
                 }
                 echo 'download done'
