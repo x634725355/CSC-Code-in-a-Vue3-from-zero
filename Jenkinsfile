@@ -5,10 +5,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh '${env.pnpm} -v'
-                sh '${env.pnpm} i'
+                nodejs('v21.7.2') {
+                    sh 'yarn install'
+                    sh 'yarn build'
+                }
                 echo 'download done'
-                sh '${env.pnpm} run build-v'
+                nodejs('v21.7.2') {
+                    sh 'pnpm run build-v'
+                }
                 echo 'build done'
             }
         }
