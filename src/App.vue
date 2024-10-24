@@ -6,7 +6,7 @@ import { useRoute } from "vue-router";
 import AppLayout from "./layouts/AppLayout.vue";
 
 const route = useRoute();
-
+const app = 1111
 const isHome = ref(false);
 
 watch(route, (newValue, oldValue) => {
